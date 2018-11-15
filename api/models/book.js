@@ -17,7 +17,8 @@ var BookSchema = Schema({
   author:{
     type: Schema.ObjectId,
     ref: 'Author'
-  }
+  },
+  status: String
 });
 
 module.exports = mongoose.model('Book', BookSchema);

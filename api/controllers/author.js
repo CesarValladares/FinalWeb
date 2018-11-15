@@ -15,62 +15,73 @@ var authorController = {};
 
 
 //CREATE A NEW AUTHOR
-authorController.saveAuthor = (req, res) => {
+authorController.createAuthor = (req, res) => {
 
-  var author = new Author();
-  var params = req.body;
-  var employeeId = req.params.employee;
+  if (!req.headers.role) {
+    res.status(500).send({message: 'ERROR EN LA PETICION_'});
 
-  author.name = params.name;
-  author.surname = params.surname;
-  author.description = params.description;
-  author.image = 'null';
-  author.status = 'ACTIVE';
+  } else {
+    if (req.headers.role != 'ROLE_ADMIN') {
+      res.status(500).send({message: 'ERROR EN LA PETICION'});
 
-  if (author.name != null && author.surname != null && author.description != null) {
-    //Guarar autor en BD
-    author.save((err, authorStored) => {
+    } else {
 
-      if (err) {
-        res.status(500).send({message: 'ERROR AL GUARDAR AUTOR'});
+        var author = new Author();
+        var params = req.body;
+        var employeeId = req.params.m_id;
 
-      } else {
-        if (!authorStored) {
-          res.status(404).send({message: 'NO SE HA GUARDADO AL AUTOR'});
+        author.name = params.name;
+        author.surname = params.surname;
+        author.description = params.description;
+        author.image = 'null';
+        author.status = 'ACTIVE';
 
-        } else {
-          var c_author = new CAuthor();
-          c_author.date = new Date();
-          c_author.employee = employeeId;
-          c_author.author = authorStored._id;
+        if (author.name != null && author.surname != null && author.description != null) {
+          //Guarar autor en BD
+          author.save((err, authorStored) => {
 
-          //Guarar registro de autor creado en BD
-          c_author.save((err, cauthorStored) => {
             if (err) {
-              res.status(500).send({message: 'ERROR AL GUARDAR REGISTRO DE AUTOR CREADO'});
+              res.status(500).send({message: 'ERROR AL GUARDAR AUTOR'});
 
             } else {
-              if (!cauthorStored) {
-                res.status(404).send({message: 'NO SE HA REGISTRADO LA CREACION DEL AUTOR'});
+              if (!authorStored) {
+                res.status(404).send({message: 'NO SE HA GUARDADO AL AUTOR'});
 
               } else {
-                res.status(200).send({author: authorStored});
+                var c_author = new CAuthor();
+                c_author.date = new Date();
+                c_author.employee = employeeId;
+                c_author.author = authorStored._id;
+
+                //Guarar registro de autor creado en BD
+                c_author.save((err, cauthorStored) => {
+                  if (err) {
+                    res.status(500).send({message: 'ERROR AL GUARDAR REGISTRO DE AUTOR CREADO'});
+
+                  } else {
+                    if (!cauthorStored) {
+                      res.status(404).send({message: 'NO SE HA REGISTRADO LA CREACION DEL AUTOR'});
+
+                    } else {
+                      res.status(200).send({author: authorStored});
+                    }
+                  }
+                });
               }
             }
           });
-        }
-      }
-    });
 
-  } else {
-    res.status(200).send({message: 'Introduce todos los campos para crear un nuevo autor'});
+        } else {
+          res.status(200).send({message: 'Introduce todos los campos para crear un nuevo autor'});
+        }
+    }
   }
 }
 
 
 
 //GET CLIENT
-authorController.getAuthor = (req, res) => {
+authorController.readAuthor = (req, res) => {
 
   var authorId = req.params.id;
 
@@ -90,26 +101,34 @@ authorController.getAuthor = (req, res) => {
 
 
 //GET CLIENTS
-authorController.getAuthors = (req, res) => {
+authorController.readAuthors = (req, res) => {
 
   if (req.params.page) {
     var page = req.params.page;
   } else {
     var page = 1;
   }
-  var itemsPerPage = 10;
+  var itemsPerPage = 3;
 
-  Author.find({status: 'ACTIVE'}).sort('name').paginate(page, itemsPerPage, (err, authors, total) => {
+  Author.find({status: 'ACTIVE'}).sort('name').exec(function(err, authors){
     if (err) {
       res.status(500).send({message: 'ERROR EN LA PETICION'});
+
     } else {
       if (authors) {
-        return res.status(500).send({
-          total_items: total,
-          authors: authors
+        Author.count({status: 'ACTIVE'}, function(err, count) {
+           if (err) {
+             res.status(500).send({message: 'ERROR EN LA PETICION'});
+
+           } else {
+             return res.status(500).send({
+               total: count,
+               authors: authors
+             });
+           }
         });
       } else {
-        res.status(404).send({message: 'NO HAY AUTORES'});
+        res.status(404).send({message: 'NO HAY ARTISTAS'});
       }
     }
   });
@@ -120,161 +139,188 @@ authorController.getAuthors = (req, res) => {
 
 //UPDATE CLIENT
 authorController.updateAuthor = (req, res) => {
-  var authorId = req.params.id;
-  var employeeId = req.params.employee;
-  var update = req.body;
 
-  Author.findByIdAndUpdate(authorId, update, (err, authorUpdated) => {
-    if (err) {
-      res.status(500).send({message: 'Error al actualizar autor'});
+  if (!req.headers.role) {
+    res.status(500).send({message: 'ERROR EN LA PETICION_'});
+
+  } else {
+    if (req.headers.role != 'ROLE_ADMIN') {
+      res.status(500).send({message: 'ERROR EN LA PETICION'});
 
     } else {
-      if (!authorUpdated) {
-        res.status(404).send({message: 'No se ha podido actualizar al autor'});
+      var authorId = req.params.id;
+      var employeeId = req.params.employee;
+      var update = req.body;
 
-      } else {
-        var u_author = new UAuthor();
-        u_author.date = new Date();
-        u_author.before = authorUpdated;
-        u_author.employee = employeeId;
-        u_author.author = authorUpdated._id;
+      Author.findByIdAndUpdate(authorId, update, (err, authorUpdated) => {
+        if (err) {
+          res.status(500).send({message: 'Error al actualizar autor'});
 
-        Author.findOne({_id: authorId}, (err, upAuthor) => {
-          if (err) {
-            res.status(500).send({message: 'ERROR EN LA PETICION'});
+        } else {
+          if (!authorUpdated) {
+            res.status(404).send({message: 'No se ha podido actualizar al autor'});
 
           } else {
-            if (!upAuthor) {
-              res.status(404).send({message: 'EL AUTOR NO EXISTE'});
+            var u_author = new UAuthor();
+            u_author.date = new Date();
+            u_author.before = authorUpdated;
+            u_author.employee = employeeId;
+            u_author.author = authorUpdated._id;
 
-            } else {
-              u_author.after = upAuthor;
+            Author.findOne({_id: authorId}, (err, upAuthor) => {
+              if (err) {
+                res.status(500).send({message: 'ERROR EN LA PETICION'});
 
-              //Guarar registro de autor modificado en BD
-              u_author.save((err, uauthorStored) => {
-                if (err) {
-                  res.status(500).send({message: 'ERROR AL GUARDAR REGISTRO DE AUTOR ACTUALIZADO'});
+              } else {
+                if (!upAuthor) {
+                  res.status(404).send({message: 'EL AUTOR NO EXISTE'});
 
                 } else {
-                  if (!uauthorStored) {
-                    res.status(404).send({message: 'NO SE HA REGISTRADO LA ACTUALIZACION DEL AUTOR'});
+                  u_author.after = upAuthor;
 
-                  } else {
-                    res.status(200).send({upAuthor});
-                  }
+                  //Guarar registro de autor modificado en BD
+                  u_author.save((err, uauthorStored) => {
+                    if (err) {
+                      res.status(500).send({message: 'ERROR AL GUARDAR REGISTRO DE AUTOR ACTUALIZADO'});
+
+                    } else {
+                      if (!uauthorStored) {
+                        res.status(404).send({message: 'NO SE HA REGISTRADO LA ACTUALIZACION DEL AUTOR'});
+
+                      } else {
+                        res.status(200).send({upAuthor});
+                      }
+                    }
+                  });
                 }
-              });
-            }
+              }
+            });
           }
-        });
-      }
+        }
+      });
     }
-  });
+  }
 }
 
 
 
 //DEACTIVATE AUTHOR
-authorController.inactiveAuthor = (req,res) => {
-  var employeeId = req.params.employee;
-  var authorId = req.params.id;
-  var update = {status: 'INACTIVE'};
+authorController.deleteAuthor = (req,res) => {
 
-  Author.findByIdAndUpdate(authorId, update, (err, authorUpdated) => {
-    if (err) {
-      res.status(500).send({message: 'Error al actualizar cliente'});
+  if (!req.headers.role) {
+    res.status(500).send({message: 'ERROR EN LA PETICION_'});
+
+  } else {
+    if (req.headers.role != 'ROLE_ADMIN') {
+      res.status(500).send({message: 'ERROR EN LA PETICION'});
 
     } else {
-      if (!authorUpdated) {
-        res.status(404).send({message: 'No se ha podido inactivar al autor'});
+      var employeeId = req.params.employee;
+      var authorId = req.params.id;
+      var update = {status: 'INACTIVE'};
 
-      } else {
-        var d_author = new DClient();
-        d_client.date = new Date();
-        if (req.params.employee) {
-          d_client.employee = req.params.employee;
-        }
-        else {
-          d_client.employee = null;
-        }
-
-        Client.findOne({_id: clientId}, (err, upClient) => {
-          if (err) {
-            res.status(500).send({message: 'ERROR EN LA PETICION'});
-          }
-          else {
-            if (!upClient) {
-              res.status(404).send({message: 'EL CLIENTE NO EXISTE'});
-            }
-            else {
-              d_client.client = upClient;
-
-              //Guarar registro de cliente borrado en BD
-              d_client.save((err, dclientStored) => {
-                if (err) {
-                  res.status(500).send({message: 'ERROR AL GUARDAR REGISTRO DE CLIENTE INACTIVO'});
-                }
-                else {
-                  if (!dclientStored) {
-                    res.status(404).send({message: 'NO SE HA REGISTRADO DEL CLIENTE DESACTIVADO'});
-                  }
-                  else {
-                    res.status(200).send({upClient});
-                  }
-                }
-              });
-            }
-          }
-        });
-      }
-    }
-  });
-}
-
-
-//UPLOAD CLIENTS IMAGE
-clientController.uploadImage = (req, res) => {
-
-  var clientId = req.params.id;
-  var file_name = 'null';
-
-  if (req.files) {
-    var file_path = req.files.image.path;
-    var file_split = file_path.split('/');
-    var file_name = file_split[2];
-    var ext_split = file_path.split('.');
-    var file_ext = ext_split[1];
-
-    if (file_ext == 'png' || file_ext == 'jpg' || file_ext == 'gif') {
-      Client.findByIdAndUpdate(clientId, {image: file_name}, (err, clientUpdated) => {
+      Author.findByIdAndUpdate(authorId, update, (err, authorUpdated) => {
         if (err) {
           res.status(500).send({message: 'Error al actualizar cliente'});
-        }
-        else {
-          if (!clientUpdated) {
-            res.status(404).send({message: 'No se ha podido actualizar al cliente'});
-          }
-          else {
-            res.status(200).send({image: file_name, user: clientUpdated});
+
+        } else {
+          if (!authorUpdated) {
+            res.status(404).send({message: 'No se ha podido inactivar al autor'});
+
+          } else {
+            var d_author = new DAuthor();
+            d_author.date = new Date();
+            d_author.employee = employeeId;
+
+            Author.findOne({_id: authorId}, (err, upAuthor) => {
+              if (err) {
+                res.status(500).send({message: 'ERROR EN LA PETICION'});
+
+              } else {
+                if (!upAuthor) {
+                  res.status(404).send({message: 'EL AUTOR NO EXISTE'});
+
+                } else {
+                  d_author.author = upAuthor;
+
+                  //Guarar registro de autor inhabilitado en BD
+                  d_author.save((err, dauthorStored) => {
+                    if (err) {
+                      res.status(500).send({message: 'ERROR AL GUARDAR REGISTRO DE AUTOR INACTIVO'});
+
+                    } else {
+                      if (!dauthorStored) {
+                        res.status(404).send({message: 'NO SE HA REGISTRADO AL AUTOR DESACTIVADO'});
+
+                      } else {
+                        res.status(200).send({upAuthor});
+                      }
+                    }
+                  });
+                }
+              }
+            });
           }
         }
       });
     }
-    else {
-      res.status(200).send({message: 'Extensión no valida'});
-    }
   }
-  else {
-    res.status(200).send({message: 'No se ha subido ninguna imagen'});
+}
+
+
+//UPLOAD CLIENTS IMAGE
+authorController.uploadImage = (req, res) => {
+
+  if (!req.headers.role) {
+    res.status(500).send({message: 'ERROR EN LA PETICION_'});
+
+  } else {
+    if (req.headers.role != 'ROLE_ADMIN') {
+      res.status(500).send({message: 'ERROR EN LA PETICION'});
+
+    } else {
+      var authorId = req.params.id;
+      var file_name = 'null';
+
+      if (req.files) {
+        var file_path = req.files.image.path;
+        var file_split = file_path.split('/');
+        var file_name = file_split[2];
+        var ext_split = file_path.split('.');
+        var file_ext = ext_split[1];
+
+        if (file_ext == 'png' || file_ext == 'jpg' || file_ext == 'gif') {
+          Author.findByIdAndUpdate(authorId, {image: file_name}, (err, authorUpdated) => {
+            if (err) {
+              res.status(500).send({message: 'Error al actualizar cliente'});
+
+            } else {
+              if (!authorUpdated) {
+                res.status(404).send({message: 'No se ha podido actualizar la imagen del autor'});
+
+              } else {
+                res.status(200).send({image: file_name, author: authorUpdated});
+              }
+            }
+          });
+
+        } else {
+          res.status(200).send({message: 'Extensión no valida'});
+        }
+
+      } else {
+        res.status(200).send({message: 'No se ha subido ninguna imagen'});
+      }
+    }
   }
 }
 
 
 
 //GET CLIENTS IMAGE
-clientController.getImageFile = (req, res) => {
+authorController.getImageFile = (req, res) => {
   var imageFile = req.params.imageFile;
-  var path_file = './uploads/clients/' + imageFile;
+  var path_file = './uploads/authors/' + imageFile;
   fs.exists(path_file, function(exists){
     if (exists) {
       res.sendFile(path.resolve(path_file));
@@ -285,4 +331,4 @@ clientController.getImageFile = (req, res) => {
   });
 }
 
-module.exports = clientController
+module.exports = authorController

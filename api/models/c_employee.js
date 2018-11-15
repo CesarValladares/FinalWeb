@@ -1,19 +1,19 @@
-//MODELO D_CLIENT
+//MODELO C_EMPLOYEE
 'use strict'
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var DBookSchema = Schema({
+var CEmployeeSchema = Schema({
   date: Date,
-  employee:{
+  mannager:{
     type: Schema.ObjectId,
     ref: 'Employee'
   },
-  book:{
+  employee:{
     type: Schema.ObjectId,
-    ref: 'Book'
+    ref: 'Employee'
   }
 });
 
-module.exports = mongoose.model('DBook', DBookSchema);
+module.exports = mongoose.model('CEmployee', CEmployeeSchema);

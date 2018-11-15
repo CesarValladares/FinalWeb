@@ -11,7 +11,8 @@ var EmployeeSchema = Schema({
   username: String,
   password: String,
   image: String,
-  role: String
+  role: String,
+  status: String
 });
 
 module.exports = mongoose.model('Employee', EmployeeSchema);

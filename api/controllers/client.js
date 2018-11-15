@@ -14,72 +14,143 @@ var jwt = require('../services/jwt');
 var clientController = {};
 
 //CREATE A NEW CLIENT
-clientController.saveClient = (req, res) => {
+clientController.createClient = (req, res) => {
 
-  var client = new Client();
-  var params = req.body;
+  if (req.params.employee) {
+    if (!req.headers.role) {
+      res.status(500).send({message: 'ERROR EN LA PETICION'});
 
-  client.name = params.name;
-  client.surname = params.surname;
-  client.email = params.email;
-  client.username = params.username;
-  //user.role = 'ROLE_ADMIN';
-  client.role = 'ROLE_USER';
-  client.status = 'ACTIVE';
-  client.image = 'null';
-  client.balance = 0;
+    } else {
+      if (req.headers.role != 'ROLE_ADMIN') {
+        res.status(500).send({message: 'ERROR EN LA PETICION'});
+
+      } else {
+          var employeeId = req.params.employee;
+          var client = new Client();
+          var params = req.body;
+
+          client.name = params.name;
+          client.surname = params.surname;
+          client.email = params.email;
+          client.username = params.username;
+          client.role = 'ROLE_USER';
+          client.status = 'ACTIVE';
+          client.image = 'null';
+          client.balance = 0;
 
 
-  if (params.password) {
-    //Encriptar contraseña y guardar datos
-    bcrypt.hash(params.password, null, null, function(err, hash){
-      client.password = hash;
-      if (client.name != null && client.surname != null && client.email != null) {
+          if (params.password) {
+            //Encriptar contraseña y guardar datos
+            bcrypt.hash(params.password, null, null, function(err, hash){
+              client.password = hash;
+              if (client.name != null && client.surname != null && client.email != null) {
 
-        //Guarar usuario en BD
-        client.save((err, clientStored) => {
-          if (err) {
-            res.status(500).send({message: 'ERROR AL GUARDAR CLIENTE'});
-          }
-          else {
-            if (!clientStored) {
-              res.status(404).send({message: 'NO SE HA REGISTRADO EL CLIENTE'});
-            }
-            else {
-              var c_client = new CClient();
-              c_client.date = new Date();
-              c_client.client = clientStored._id;
-              if (req.params.employee) {
-                c_client.employee = req.params.employee;
-              }
-              else {
-                c_client.employee = null;
-              }
-              //Guarar registro de cliente borrado en BD
-              c_client.save((err, cclientStored) => {
-                if (err) {
-                  res.status(500).send({message: 'ERROR AL GUARDAR REGISTRO DE CLIENTE CREADO'});
-                }
-                else {
-                  if (!cclientStored) {
-                    res.status(404).send({message: 'NO SE HA REGISTRADO LA CREACION DE CLIENTE'});
+                //Guarar usuario en BD
+                client.save((err, clientStored) => {
+                  if (err) {
+                    res.status(500).send({message: 'ERROR AL GUARDAR CLIENTE'});
                   }
                   else {
-                    res.status(200).send({client: clientStored});
+                    if (!clientStored) {
+                      res.status(404).send({message: 'NO SE HA REGISTRADO EL CLIENTE'});
+                    }
+                    else {
+                      var c_client = new CClient();
+                      c_client.date = new Date();
+                      c_client.client = clientStored._id;
+                      c_client.employee = employeeId;
+
+                      //Guarar registro de cliente borrado en BD
+                      c_client.save((err, cclientStored) => {
+                        if (err) {
+                          res.status(500).send({message: 'ERROR AL GUARDAR REGISTRO DE CLIENTE CREADO'});
+                        }
+                        else {
+                          if (!cclientStored) {
+                            res.status(404).send({message: 'NO SE HA REGISTRADO LA CREACION DE CLIENTE'});
+                          }
+                          else {
+                            res.status(200).send({client: clientStored});
+                          }
+                        }
+                      });
+                    }
                   }
-                }
-              });
-            }
+                });
+              }
+              else {
+                res.status(200).send({message: 'Introduce todos los campos'});
+              }
+            });
           }
-        });
+          else{
+            res.status(500).send({message: 'Introduce la contraseña'});
+          }
       }
-      else {
-        res.status(200).send({message: 'Introduce todos los campos'});
-      }
-    });
+    }
   }
-  else{
-    res.status(500).send({message: 'Introduce la contraseña'});
+  else {
+    var employeeId = null;
+    var client = new Client();
+    var params = req.body;
+
+    client.name = params.name;
+    client.surname = params.surname;
+    client.email = params.email;
+    client.username = params.username;
+    client.role = 'ROLE_USER';
+    client.status = 'ACTIVE';
+    client.image = 'null';
+    client.balance = 0;
+
+
+    if (params.password) {
+      //Encriptar contraseña y guardar datos
+      bcrypt.hash(params.password, null, null, function(err, hash){
+        client.password = hash;
+        if (client.name != null && client.surname != null && client.email != null) {
+
+          //Guarar usuario en BD
+          client.save((err, clientStored) => {
+            if (err) {
+              res.status(500).send({message: 'ERROR AL GUARDAR CLIENTE'});
+            }
+            else {
+              if (!clientStored) {
+                res.status(404).send({message: 'NO SE HA REGISTRADO EL CLIENTE'});
+              }
+              else {
+                var c_client = new CClient();
+                c_client.date = new Date();
+                c_client.client = clientStored._id;
+                c_client.employee = employeeId;
+
+                //Guarar registro de cliente borrado en BD
+                c_client.save((err, cclientStored) => {
+                  if (err) {
+                    res.status(500).send({message: 'ERROR AL GUARDAR REGISTRO DE CLIENTE CREADO'});
+                  }
+                  else {
+                    if (!cclientStored) {
+                      res.status(404).send({message: 'NO SE HA REGISTRADO LA CREACION DE CLIENTE'});
+                    }
+                    else {
+                      res.status(200).send({client: clientStored});
+                    }
+                  }
+                });
+              }
+            }
+          });
+        }
+        else {
+          res.status(200).send({message: 'Introduce todos los campos'});
+        }
+      });
+    }
+    else{
+      res.status(500).send({message: 'Introduce la contraseña'});
+    }
   }
 }
 
