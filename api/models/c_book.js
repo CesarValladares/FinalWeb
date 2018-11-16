@@ -13,7 +13,7 @@ var CBookSchema = Schema({
   book:{
     type: Schema.ObjectId,
     ref: 'Book'
-  }
+  },
 });
 
 module.exports = mongoose.model('CBook', CBookSchema);

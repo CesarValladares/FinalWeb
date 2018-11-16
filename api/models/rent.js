@@ -8,10 +8,32 @@ var RentSchema = Schema({
   date_init: Date,
   date_end: Date,
   status: String,
-  total_books: Number,
   client:{
     type: Schema.ObjectId,
     ref: 'Client'
+  },
+  total_books: Number,
+  books: {
+      book1: {
+        type: Schema.ObjectId,
+        ref: 'Book'
+      },
+      book2: {
+        type: Schema.ObjectId,
+        ref: 'Book'
+      },
+      book3: {
+        type: Schema.ObjectId,
+        ref: 'Book'
+      },
+      book4: {
+        type: Schema.ObjectId,
+        ref: 'Book'
+      },
+      book5: {
+        type: Schema.ObjectId,
+        ref: 'Book'
+      }
   }
 });
 

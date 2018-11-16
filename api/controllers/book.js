@@ -19,14 +19,14 @@ bookController.createBook = (req, res) => {
     res.status(500).send({message: 'ERROR EN LA PETICION_'});
 
   } else {
-    if (req.headers.role != 'ROLE_ADMIN' || req.headers.role != 'ROLE_EMPLOYEE') {
-      res.status(500).send({message: 'ERROR EN LA PETICION'});
+    if (req.headers.role != 'ROLE_ADMIN' && req.headers.role != 'ROLE_EMPLOYEE') {
+      res.status(500).send({message: 'ERROR EN LA PETICION___'});
 
     } else {
 
       var book = new Book();
       var authorId = req.params.a_id;
-      var employeeId = req.params.m_id;
+      var employeeId = req.params.e_id;
 
       var params = req.body;
       book.title = params.title;
@@ -40,6 +40,8 @@ bookController.createBook = (req, res) => {
       book.inhouse = params.total;
       book.author = authorId;
       book.status = 'ACTIVE';
+      book.image = '';
+      book.file = '';
 
       if (!book.title || !book.description || !book.genre || !book.year || !book.pages || !book.editorial || !book.total) {
         res.status(501).send({message: 'LLENE TODOS LOS CAMPOS'});
@@ -56,7 +58,7 @@ bookController.createBook = (req, res) => {
               var c_book = new CBook();
               c_book.date = new Date();
               c_book.employee = employeeId;
-              c_book.author = bookStored.author;
+              c_book.book = bookStored._id;
 
               //Guarar registro de autor creado en BD
               c_book.save((err, cbookStored) => {
@@ -256,29 +258,94 @@ bookController.deleteBook = (req,res) => {
 }
 
 
-/*
+//UPLOAD CLIENTS IMAGE
+bookController.uploadImage = (req, res) => {
+
+  if (!req.headers.role) {
+    res.status(500).send({message: 'ERROR EN LA PETICION_'});
+
+  } else {
+    if (req.headers.role != 'ROLE_ADMIN') {
+      res.status(500).send({message: 'ERROR EN LA PETICION___'});
+
+    } else {
+      var bookId = req.params.id;
+      var file_name = 'null';
+
+      if (req.files) {
+        var file_path = req.files.image.path;
+        var file_split = file_path.split('/');
+        var file_name = file_split[3];
+        var ext_split = file_path.split('.');
+        var file_ext = ext_split[1];
+
+        if (file_ext == 'png' || file_ext == 'jpg' || file_ext == 'gif') {
+          Book.findByIdAndUpdate(bookId, {image: file_name}, (err, bookUpdated) => {
+            if (err) {
+              res.status(500).send({message: 'Error al actualizar imagen del libro'});
+
+            } else {
+              if (!bookUpdated) {
+                res.status(404).send({message: 'No se ha podido actualizar la imagen del libro'});
+
+              } else {
+                res.status(200).send({image: file_name, book: bookUpdated});
+              }
+            }
+          });
+
+        } else {
+          res.status(200).send({message: 'Extensión no valida'});
+        }
+
+      } else {
+        res.status(200).send({message: 'No se ha subido ninguna imagen'});
+      }
+    }
+  }
+}
 
 
-songController.uploadSongFile = (req, res) => {
-  var songId = req.params.id;
-  var file_name = 'No subido ...';
+
+//GET CLIENTS IMAGE
+bookController.getImageFile = (req, res) => {
+  var imageFile = req.params.imageFile;
+  var path_file = './uploads/books/images/' + imageFile;
+  fs.exists(path_file, function(exists){
+    if (exists) {
+      res.sendFile(path.resolve(path_file));
+    }
+    else {
+      res.status(200).send({message: 'No existe la imagen'});
+    }
+  });
+}
+
+
+
+
+bookController.uploadBookFile = (req, res) => {
+  var bookId = req.params.id;
+  var file_name = 'null';
 
   if (req.files) {
     var file_path = req.files.file.path;
     var file_split = file_path.split('/');
-    var file_name = file_split[2];
+    var file_name = file_split[3];
     var ext_split = file_path.split('.');
     var file_ext = ext_split[1];
 
-    if (file_ext == 'mp3' || file_ext == 'ogg') {
-      Song.findByIdAndUpdate(songId, {file: file_name}, (err, songUpdated) => {
+    if (file_ext == 'pdf') {
+      Book.findByIdAndUpdate(bookId, {file: file_name}, (err, bookUpdated) => {
         if (err) {
-          res.status(500).send({message: 'Error al actualizar cancion'});
+          res.status(500).send({message: 'Error al actualizar LIBRO'});
+
         } else {
-          if (!songUpdated) {
-            res.status(404).send({message: 'No se ha podido actualizar la canción'});
+          if (!bookUpdated) {
+            res.status(404).send({message: 'No se ha podido actualizar el libro'});
+
           } else {
-            res.status(200).send({song: songUpdated});
+            res.status(200).send({book: bookUpdated});
           }
         }
       });
@@ -292,16 +359,18 @@ songController.uploadSongFile = (req, res) => {
 
 }
 
-songController.getSongFile = (req, res) => {
-  var songFile = req.params.songFile;
-  var path_file = './uploads/songs/' + songFile;
+bookController.getBookFile = (req, res) => {
+  var bookFile = req.params.bookFile;
+  var path_file = './uploads/books/files/' + bookFile;
   fs.exists(path_file, function(exists){
     if (exists) {
       res.sendFile(path.resolve(path_file));
     } else {
-      res.status(200).send({message: 'No existe la canción'});
+      res.status(200).send({message: 'No existe el libro'});
     }
   });
 }
+
+/*
 */
 module.exports = bookController;

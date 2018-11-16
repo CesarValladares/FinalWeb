@@ -14,6 +14,8 @@ var BookSchema = Schema({
   total: Number,
   onloan: Number,
   inhouse: Number,
+  image: String,
+  file: String,
   author:{
     type: Schema.ObjectId,
     ref: 'Author'

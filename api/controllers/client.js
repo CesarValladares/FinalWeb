@@ -240,7 +240,6 @@ clientController.getClients = (req, res) => {
       }
     }
   });
-
 }
 
 
