@@ -24,7 +24,7 @@ var UClient = require('../models/u_client');
 
 var registerController = {};
 
-//GET A RENT INFO
+//GET INFO OF THE CREATION OF A BOOK
 /*
 in header send the next params
   Autorization: token_of_the_user

@@ -14,9 +14,16 @@ api.post('/employee/:m_id', md_auth.ensureAuth,employeeController.createEmployee
 api.post('/employee-login', employeeController.loginEmployee);
 api.get('/employee/:id', md_auth.ensureAuth, employeeController.readEmployee);
 api.get('/employees/:page?', md_auth.ensureAuth, employeeController.readEmployees);
-api.put('/employee/:id/:employee?', md_auth.ensureAuth, employeeController.updateEmployee);
-api.put('/delete-employee/:id/:m_id?', md_auth.ensureAuth, employeeController.deleteEmployee);
+api.put('/employee/:id/:admin', md_auth.ensureAuth, employeeController.updateEmployee);
+api.delete('/delete-employee/:id/:admin', md_auth.ensureAuth, employeeController.deleteEmployee);
 api.post('/upload-image-employee/:id', [md_auth.ensureAuth, md_upload] , employeeController.uploadImage);
 api.get('/get-image-employee/:imageFile', md_auth.ensureAuth, employeeController.getImageFile);
 
+//GET REGISTERS DONE BY ADMIN
+api.get('/ce-register/:id?', md_auth.ensureAuth, employeeController.readCreationsEmployee);
+api.get('/ue-register/:id?', md_auth.ensureAuth, employeeController.readUpdatesEmployee);
+api.get('/de-register/:id?', md_auth.ensureAuth, employeeController.readDeletionsEmployee);
+
 module.exports = api;
+
+// -ed, -io, -lt, -or

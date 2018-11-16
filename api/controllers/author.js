@@ -132,7 +132,6 @@ authorController.readAuthors = (req, res) => {
       }
     }
   });
-
 }
 
 

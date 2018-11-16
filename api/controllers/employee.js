@@ -15,6 +15,18 @@ var employeeController = {};
 
 
 //CREATE A NEW EMPLOYEE
+/*
+Function used to create an employee (normal employee).
+This function returns the created employee (as a JSON OBJECT)
+
+IMPLEMENTED WITH post
+in header send the next params
+  Autorization: token_of_the_user
+  role: ROLE_ADMIN (It is stored in the client or employee atributes as role: )
+
+in the request parameters send the next atributes in the express url
+  m_id: id_of_the_admin (this is mandatory)
+*/
 employeeController.createEmployee = (req, res) => {
 
   if (!req.headers.role) {
@@ -92,6 +104,23 @@ employeeController.createEmployee = (req, res) => {
 
 
 //LOGIN AS AN EMPLOYEE
+/*
+Function used to login as an employee (ADMIN or normal employee).
+This function returns a token if the login was correct and the logged employee JSON object
+
+IMPLEMENTED WITH post
+
+in header send the next params
+  NO PARAMS IN HEADER
+
+in the request parameters send the next atributes in the express url
+  NO PARAMS IN URL
+
+in the request body send the next atributes
+  email: email_of_the_user (this is mandatory)
+  password: password_of_the_user (this is mandatory)
+  gethash: true (this is mandatory and with this you reciebe the token, if not, just reciebe employee)
+*/
 employeeController.loginEmployee = (req, res) => {
 
   var params = req.body;
@@ -114,6 +143,7 @@ employeeController.loginEmployee = (req, res) => {
             if (params.gethash) { //Generar token con objeto del usuario
                 //devolver token de jwt
                 res.status(200).send({
+                  employee: employee,
                   token: jwt.createToken(employee)
                 });
             }
@@ -133,6 +163,18 @@ employeeController.loginEmployee = (req, res) => {
 
 
 //READ EMPLOYEE
+/*
+Function that returns an employee (as a JSON object) with a given id of the employee
+
+IMPLEMENTED WITH get
+
+in header send the next params
+  Authorization: token (this is mandatory)
+  role: ROLE_ADMIN (this is mandatory)
+
+in the request parameters send the next atributes in the express url
+  id: employee_id (this is mandatory)
+*/
 employeeController.readEmployee = (req, res) => {
 
   if (!req.headers.role) {
@@ -164,6 +206,18 @@ employeeController.readEmployee = (req, res) => {
 
 
 //READ EMPLOYEES
+/*
+Function that returns the number and a lsit of active employees in a page (as a JSON object)
+
+IMPLEMENTED WITH get
+
+in header send the next params
+  Authorization: token (this is mandatory)
+  role: ROLE_ADMIN (this is mandatory)
+
+in the request parameters send the next atributes in the express url
+  page: number of the page (this is not mandatory)
+*/
 employeeController.readEmployees = (req, res) => {
 
   if (!req.headers.role) {
@@ -179,17 +233,24 @@ employeeController.readEmployees = (req, res) => {
       } else {
         var page = 1;
       }
-      var itemsPerPage = 3;
+      var itemsPerPage = 10;
 
-      Employee.find({status: 'ACTIVE_EMPLOYEE'}).sort('name').paginate(page, itemsPerPage, (err, employees, total) => {
+      Employee.find({status: 'ACTIVE_EMPLOYEE'}).sort('name').exec(function(err, employees){
         if (err) {
           res.status(500).send({message: 'ERROR EN LA PETICION'});
 
         } else {
           if (employees) {
-            return res.status(500).send({
-              total_items: total,
-              employees: employees
+            Employee.count({status: 'ACTIVE_EMPLOYEE'}, function(err, count) {
+               if (err) {
+                 res.status(500).send({message: 'ERROR EN LA PETICION'});
+
+               } else {
+                 return res.status(500).send({
+                   total: count,
+                   employees: employees
+                 });
+               }
             });
           } else {
             res.status(404).send({message: 'NO HAY ARTISTAS'});
@@ -203,6 +264,19 @@ employeeController.readEmployees = (req, res) => {
 
 
 //UPDATE CLIENT
+/*
+Function that updates and returns the updated employee (as a JSON object)
+
+IMPLEMENTED WITH put
+
+in header send the next params
+  Authorization: token (this is mandatory)
+  role: ROLE_ADMIN (this is mandatory)
+
+in the request parameters send the next atributes in the express url
+  id: id_of_employee_to_update (this is mandatory)
+  admin: id_of_admin (this is mandatory)
+*/
 employeeController.updateEmployee = (req, res) => {
 
   if (!req.headers.role) {
@@ -214,6 +288,7 @@ employeeController.updateEmployee = (req, res) => {
 
     } else {
       var employeeId = req.params.id;
+      var adminId = req.params.admin;
       var update = req.body;
 
       Employee.findByIdAndUpdate(employeeId, update, (err, employeeUpdated) => {
@@ -225,16 +300,11 @@ employeeController.updateEmployee = (req, res) => {
             res.status(404).send({message: 'No se ha podido actualizar al empleado'});
           } else {
 
-            if (!req.params.m_id) {
-              var mannagerId = null;
-            } else {
-              var mannagerId = req.params.m_id;
-            }
-
             var u_employee = new UEmployee();
             u_employee.date = new Date();
             u_employee.before = employeeUpdated;
             u_employee.employee = employeeUpdated._id;
+            u_employee.mannager = adminId;
 
 
             Employee.findOne({_id: employeeId}, (err, upEmployee) => {
@@ -277,6 +347,19 @@ employeeController.updateEmployee = (req, res) => {
 
 
 //DELETE CLIENT
+/*
+Function that deletes (not really delete, just deactivastes) and returns the deactivated employee (as a JSON object)
+
+IMPLEMENTED WITH put
+
+in header send the next params
+  Authorization: token (this is mandatory)
+  role: ROLE_ADMIN (this is mandatory)
+
+in the request parameters send the next atributes in the express url
+  id: id_of_employee_to_deactivate (this is mandatory)
+  admin: id_of_admin (this is mandatory)
+*/
 employeeController.deleteEmployee = (req,res) => {
 
   if (!req.headers.role) {
@@ -302,7 +385,7 @@ employeeController.deleteEmployee = (req,res) => {
             var d_employee = new DEmployee();
             d_employee.date = new Date();
             d_employee.employee = employeeId;
-            d_employee.mannager = req.params.m_id;
+            d_employee.mannager = req.params.admin;
 
             Employee.findOne({_id: employeeId}, (err, delEmployee) => {
               if (err) {
@@ -341,6 +424,17 @@ employeeController.deleteEmployee = (req,res) => {
 
 
 //UPLOAD EMPLOYEE IMAGE
+/*
+Function that uploads an image to an employee and returns the employee (as a JSON object)
+
+IMPLEMENTED WITH post
+
+in header send the next params
+  Authorization: token (this is mandatory)
+
+in the request parameters send the next atributes in the express url
+  id: id_of_employee (this is mandatory)
+*/
 employeeController.uploadImage = (req, res) => {
 
   var employeeId = req.params.id;
@@ -380,6 +474,17 @@ employeeController.uploadImage = (req, res) => {
 
 
 //GET EMPLOYEE IMAGE
+/*
+Function that returns an employee image file
+
+IMPLEMENTED WITH get
+
+in header send the next params
+  Authorization: token (this is mandatory)
+
+in the request parameters send the next atributes in the express url
+  id: imageFile (this is mandatory, is the name of the image in the users image: attribute)
+*/
 employeeController.getImageFile = (req, res) => {
   var imageFile = req.params.imageFile;
   var path_file = './uploads/employees/' + imageFile;
@@ -389,6 +494,112 @@ employeeController.getImageFile = (req, res) => {
 
     } else {
       res.status(200).send({message: 'No existe la imagen'});
+    }
+  });
+}
+
+//**********************  GET REGISTERS *************************
+//GET CREATED EMPLOYEES REGISTERS
+/*
+Function that returns the register of the created employee or employees, returns the list of the creation of employees with its info
+
+IMPLEMENTED WITH get
+
+in header send the next params
+  Autorization: token_of_the_user
+
+in the request parameters send the next atributes in the express url
+  e_id: id_of_the_employee (this is not mandatory and is used to get the employee's creation info, if not exist, then return all registers)
+*/
+employeeController.readCreationsEmployee = (req, res) => {
+
+  var employeeId = req.params.id;
+
+  if (!employeeId) { //Sacar todos las rentas de BD
+    var find = CEmployee.find({}).sort('date');
+  } else { //Saca rentas del cliente
+    var find = CEmployee.find({employee: employeeId}).sort('date');
+  }
+
+  find.populate([{path: 'mannager'},{path: 'employee'}]).exec((err, employee_creations) => {
+    if (err) {
+      res.status(500).send({message: 'ERROR EN LA PETICION'});
+    } else {
+      if (!employee_creations) {
+        res.status(404).send({message: 'NO HAY REGISTROS'});
+      } else {
+        res.status(200).send({employee_creations});
+      }
+    }
+  });
+}
+
+/*
+Function that returns the updates over an employee
+
+IMPLEMENTED WITH get
+
+in header send the next params
+  Autorization: token_of_the_user
+
+in the request parameters send the next atributes in the express url
+  id: id_of_the_employee (this is mandatory)
+*/
+employeeController.readUpdatesEmployee = (req, res) => {
+
+  var employeeId = req.params.id;
+
+  if (!employeeId) { //Sacar todos las rentas de BD
+    var find = UEmployee.find({}).sort('date');
+  } else { //Saca rentas del cliente
+    var find = UEmployee.find({employee: employeeId}).sort('date');
+  }
+
+  find.populate([{path: 'mannager'},{path: 'employee'}]).exec((err, employee_updates) => {
+    if (err) {
+      res.status(500).send({message: 'ERROR EN LA PETICION'});
+    } else {
+      if (!employee_updates) {
+        res.status(404).send({message: 'NO HAY REGISTROS'});
+      } else {
+        res.status(200).send({employee_updates});
+      }
+    }
+  });
+}
+
+
+
+/*
+Function that returns the deletion(s) of an employee
+
+IMPLEMENTED WITH get
+
+in header send the next params
+  Autorization: token_of_the_user
+
+in the request parameters send the next atributes in the express url
+  id: id_of_the_employee (this is mandatory)
+*/
+employeeController.readDeletionsEmployee = (req, res) => {
+
+  var employeeId = req.params.id;
+
+  if (!employeeId) { //Sacar todos las rentas de BD
+    var find = DEmployee.find({}).sort('date');
+  } else { //Saca rentas del cliente
+    var find = DEmployee.find({employee: employeeId}).sort('date');
+  }
+
+  find.populate([{path: 'mannager'},{path: 'employee'}]).exec((err, employee_deletions) => {
+    if (err) {
+      res.status(500).send({message: 'ERROR EN LA PETICION'});
+    } else {
+      if (!employee_deletions) {
+        res.status(404).send({message: 'NO HAY REGISTROS'});
+      } else {
+        res.status(200).send({employee_deletions});
+      }
     }
   });
 }
