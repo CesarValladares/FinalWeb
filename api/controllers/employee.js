@@ -263,7 +263,7 @@ employeeController.readEmployees = (req, res) => {
 
 
 
-//UPDATE CLIENT
+//UPDATE EMPLOYEE
 /*
 Function that updates and returns the updated employee (as a JSON object)
 
@@ -346,11 +346,11 @@ employeeController.updateEmployee = (req, res) => {
 
 
 
-//DELETE CLIENT
+//DELETE EMPLOYEE
 /*
 Function that deletes (not really delete, just deactivastes) and returns the deactivated employee (as a JSON object)
 
-IMPLEMENTED WITH put
+IMPLEMENTED WITH delete
 
 in header send the next params
   Authorization: token (this is mandatory)
@@ -543,7 +543,7 @@ in header send the next params
   Autorization: token_of_the_user
 
 in the request parameters send the next atributes in the express url
-  id: id_of_the_employee (this is mandatory)
+  id: id_of_the_employee (this is not mandatory and is used to get the employees's updates info, if not exist, then return all registers)
 */
 employeeController.readUpdatesEmployee = (req, res) => {
 
@@ -579,7 +579,7 @@ in header send the next params
   Autorization: token_of_the_user
 
 in the request parameters send the next atributes in the express url
-  id: id_of_the_employee (this is mandatory)
+  id: id_of_the_employee (this is not mandatory and is used to get the employees's deletion info, if not exist, then return all registers)
 */
 employeeController.readDeletionsEmployee = (req, res) => {
 

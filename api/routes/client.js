@@ -12,11 +12,17 @@ var md_upload = multipart({uploadDir: './uploads/clients'});
 
 api.post('/client/:employee?',clientController.createClient);
 api.post('/client-login', clientController.loginClient);
-api.get('/client/:id', md_auth.ensureAuth, clientController.getClient);
-api.get('/clients/:page?', md_auth.ensureAuth, clientController.getClients);
+api.get('/client/:id', md_auth.ensureAuth, clientController.readClient);
+api.get('/clients/:page?', md_auth.ensureAuth, clientController.readClients);
 api.put('/client/:id/:employee?', md_auth.ensureAuth, clientController.updateClient);
-api.put('/client-inactive/:id/:employee?', md_auth.ensureAuth, clientController.inactiveClient);
+api.delete('/client/:id/:employee', md_auth.ensureAuth, clientController.deleteClient);
 api.post('/upload-image-client/:id', [md_auth.ensureAuth, md_upload] , clientController.uploadImage);
 api.get('/get-image-client/:imageFile', clientController.getImageFile);
+
+
+//GET REGISTERS OF THE CLIENTS
+api.get('/cc-register/:id?', md_auth.ensureAuth, clientController.readCreationsClient);
+api.get('/uc-register/:id?', md_auth.ensureAuth, clientController.readUpdatesClient);
+api.get('/dc-register/:id?', md_auth.ensureAuth, clientController.readDeletionsClient);
 
 module.exports = api;
