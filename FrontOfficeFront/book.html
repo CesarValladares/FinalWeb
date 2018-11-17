@@ -28,9 +28,18 @@
 				<div>Favoritos</div>
 			</a>
 			<a id="cart" class="userNavigationButton" href="">
-				<i class="fas fa-shopping-cart"></i>
-				<div>Carrito</div>
+				<i class="fas fa-book-reader"></i>
+				<div>Tus libros</div>
 			</a>
+		</div>
+		<div id="userNavigationMobile">
+			<button class="dropbtn btn btn-light" onclick="toggleDropdown()">Menu&nbsp<i class="fa fa-caret-down dropglyph"></i></button>
+			<div id="userNavigationMobileDropDownMenu" class="userNavigationMobileDropDownMenu">
+				<a href="">Tu cuenta</a>
+				<a href="">Favoritos</a>
+				<a href="">Tus libros</a>
+				<a href="" class="buscar">Buscar</a>
+			</div>
 		</div>
 	</nav>
 	
@@ -53,7 +62,7 @@
 		</div>
 		<div id="bookContentCart">
 			<div id="bookContentCartBox">
-				<button type="button" class="btn btn-success"><i class="fas fa-cart-plus glyph"></i>Alquilar</button>
+				<button type="button" class="btn btn-success"><i class="far fa-bookmark glyph"></i></i>Alquilar</button>
 				<button type="button" class="btn btn-danger"><i class="far fa-heart glyph"></i>Me gustó</button>
 			</div>
 		</div>
@@ -93,4 +102,5 @@
 		<div class="title">Nuestras sugerencias</div>
 	</div>
 </body>
+<script src="js/bookScript.js"></script>
 </html>
