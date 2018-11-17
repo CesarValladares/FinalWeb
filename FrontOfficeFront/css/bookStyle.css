@@ -1,0 +1,175 @@
+
+/*General*/
+
+html, body {
+	margin: 0;
+	padding: 0;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+a {
+	text-decoration: none;
+}
+
+.title {
+	font-size: 30px;
+	margin-bottom: 20px;
+}
+
+/*Nav*/
+
+.navbar {
+	justify-content: initial;
+	width: 100%;
+	background-color: #333;
+}
+
+.navbar form {
+	display: flex;
+	flex-wrap: wrap;
+	width: 40%;
+	margin-left: 2.5%;
+	margin-right: 2.5%;
+	margin-top: 20px;
+}
+
+#searchBtn {
+	margin-bottom: 2.5%;	
+	margin-left: 2.5%;
+	width: 15%;
+}
+
+#searchInputBox {
+	width: 80%;
+}
+
+#logoBig {
+	width: 20%;
+	max-width: 100px;
+}
+
+#logoBig img {
+	width: auto;
+	max-height: 100px;
+	margin-right: 5%;
+}
+
+#userNavigation {
+	display: flex;
+	flex-wrap: wrap;	
+	width: 35%;
+}
+
+.userNavigationButton {
+	width: 25%;
+	margin-left: 4.15151515%;
+	margin-right: 4.15151515%;
+	text-align: center;
+	color: #DDD;
+	text-decoration: none;
+	transition: all 0.5s ease;
+	padding: 1%;
+}
+
+.userNavigationButton:hover {
+	text-decoration: none;
+	background-color: #078686;
+	color: white;
+}
+
+/*Book content*/
+
+#bookContent {
+	display: flex;
+	flex-wrap: wrap;
+	margin-top: 40px;
+}
+
+#bookContentImage {
+	width: 25%;
+}
+
+#bookContentInfo {
+	width: 50%;
+}
+
+#bookContentCart {
+	width: 25%;
+}
+
+/*Book content - image*/
+
+#bookContentImage img {
+	max-width: 80%;
+	margin-left: 10%;
+	margin-right: 10%;
+}
+
+/*Book content - info*/
+
+#bookContentInfoTitle {
+	font-weight: bold;
+	font-size: 30px;
+}
+
+#bookContentInfoAuthor {
+	font-weight: bold;
+	margin-bottom: 8px;
+
+}
+
+/*Book content - cart*/
+
+#bookContentCartBox {
+	border: #DDD solid 2px;
+	border-radius: 5px;	
+	width: 80%;
+	margin-left: 10%;
+	margin-right: 10%;
+	padding: 5%;
+}
+
+#bookContentCartBox .btn {
+	width: 90%;
+	margin-left: 5%;
+	margin-right: 5%;
+}
+
+#bookContentCartBox .btn-success {
+	margin-bottom: 10px;
+}
+
+#bookContentCartBox .btn .glyph {
+	margin-right: 10px;
+}
+
+#favourite {
+	color: #212529;
+	transition: all 0.5s ease;
+	text-al
+}
+
+#favourite:hover {
+	color: #dc3545;
+}
+
+/*Book details*/
+
+#bookDetails {
+	width: 90%;
+	margin-left: 5%;
+	margin-right: 5%;
+	margin-top: 40px;
+}
+
+/*Book suggestions*/
+
+#bookSuggestions {
+	width: 80%;
+	margin-left: 5%;
+	margin-right: 5%;
+	margin-top: 40px;
+}
