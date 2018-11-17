@@ -464,7 +464,7 @@ in the request parameters send the next atributes in the express url
 */
 authorController.readCreationsAuthorByEmployee = (req, res) => {
 
-  var employeeId = req.params.id;
+  var employeeId = req.params.employee;
 
   if (!employeeId) { //Sacar todos las rentas de BD
     var find = CAuthor.find({}).sort('date');
@@ -537,7 +537,7 @@ in the request parameters send the next atributes in the express url
 */
 authorController.readUpdatesAuthorByEmployee = (req, res) => {
 
-  var employeeId = req.params.id;
+  var employeeId = req.params.employee;
 
   if (!employeeId) { //Sacar todos las rentas de BD
     var find = UAuthor.find({}).sort('date');
@@ -609,7 +609,7 @@ in the request parameters send the next atributes in the express url
 */
 authorController.readDeletesAuthorByEmployee = (req, res) => {
 
-  var employeeId = req.params.id;
+  var employeeId = req.params.employee;
 
   if (!employeeId) { //Sacar todos las rentas de BD
     var find = DAuthor.find({}).sort('date');
