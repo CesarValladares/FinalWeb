@@ -24,6 +24,9 @@ api.get('/ce-register/:id?', md_auth.ensureAuth, employeeController.readCreation
 api.get('/ue-register/:id?', md_auth.ensureAuth, employeeController.readUpdatesEmployee);
 api.get('/de-register/:id?', md_auth.ensureAuth, employeeController.readDeletionsEmployee);
 
+
+api.post('/admin', md_auth.ensureAuth,employeeController.createAdmin);
+
 module.exports = api;
 
 // -ed, -io, -lt, -or

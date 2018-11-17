@@ -79,7 +79,7 @@ employeeController.createEmployee = (req, res) => {
                         res.status(404).send({message: 'NO SE HA REGISTRADO EMPLEADO'});
 
                       } else {
-                        res.status(200).send({mng: employeeStored});
+                        res.status(200).send({employee: employeeStored});
                       }
                     }
                   });
@@ -603,5 +603,39 @@ employeeController.readDeletionsEmployee = (req, res) => {
     }
   });
 }
+
+
+
+
+
+employeeController.createAdmin = (req, res) => {
+
+  var employee = new Employee();
+  var params = req.body;
+
+  employee.name = "Admin";
+  employee.surname = "Admin";
+  employee.email = "admin@admin.com"
+  employee.username = "Admin";
+  employee.role = 'ROLE_ADMIN';
+  employee.image = 'null';
+  employee.status = 'ACTIVE_ADMIN';
+
+  bcrypt.hash(params.password, null, null, function(err, hash){
+    employee.password = hash;
+    employee.save((err, adminStored) => {
+      if (err) {
+        res.status(500).send({message: 'ERROR AL GUARDAR EMPLEADO'});
+      }  else {
+        if (!adminStored) {
+          res.status(404).send({message: 'NO SE HA REGISTRADO AL EMPLEADO'});
+        } else {
+          res.status(200).send({admin: adminStored});
+        }
+      }
+    });
+  });
+}
+
 
 module.exports = employeeController
