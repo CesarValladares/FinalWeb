@@ -1,3 +1,4 @@
+//For displaying the user nav dropdown for mobile
 document.getElementById("userNavigationMobileDropDownMenu").style.display = "none";
 function toggleDropdown() {
 	var x = document.getElementById("userNavigationMobileDropDownMenu");
