@@ -51,6 +51,7 @@ bookController.createBook = (req, res) => {
       book.total = params.total;
       book.onloan = 0;
       book.inhouse = params.total;
+      book.type = params.type;
       book.author = authorId;
       book.status = 'ACTIVE';
       book.image = '';
@@ -439,7 +440,7 @@ bookController.uploadBookFile = (req, res) => {
         var ext_split = file_path.split('.');
         var file_ext = ext_split[1];
 
-        if (file_ext == 'pdf') {
+        if (file_ext == 'pdf' || file_ext == 'mp3') {
           Book.findByIdAndUpdate(bookId, {file: file_name}, (err, bookUpdated) => {
             if (err) {
               res.status(500).send({message: 'Error al actualizar LIBRO'});
