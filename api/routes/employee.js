@@ -25,7 +25,7 @@ api.get('/ue-register/:id?', md_auth.ensureAuth, employeeController.readUpdatesE
 api.get('/de-register/:id?', md_auth.ensureAuth, employeeController.readDeletionsEmployee);
 
 
-api.post('/admin', md_auth.ensureAuth,employeeController.createAdmin);
+api.post('/admin', employeeController.createAdmin);
 
 module.exports = api;
 
