@@ -233,7 +233,7 @@ employeeController.readEmployees = (req, res) => {
       } else {
         var page = 1;
       }
-      var itemsPerPage = 10;
+      var itemsPerPage = 3;
 
       Employee.find({status: 'ACTIVE_EMPLOYEE'}).sort('name').exec(function(err, employees){
         if (err) {
