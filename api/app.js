@@ -6,6 +6,15 @@ var bodyParser = require('body-parser');
 
 var app = express();
 
+const port = 3977;
+
+app.use(express.static('FrontOfficeFront'));
+
+app.get('/', function(req, res){
+    res.sendfile('FrontOfficeFront/login.html');
+});
+
+
 //Cargar rutas
 var employee_routes = require('./routes/employee');
 var client_routes = require('./routes/client');
