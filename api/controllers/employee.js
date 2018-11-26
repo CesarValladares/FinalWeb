@@ -123,6 +123,8 @@ in the request body send the next atributes
 */
 employeeController.loginEmployee = (req, res) => {
 
+  console.log('ENTRA A LOGIN');
+  console.log(req.body);
   var params = req.body;
   var email = params.email;
   var password = params.password;
@@ -142,6 +144,7 @@ employeeController.loginEmployee = (req, res) => {
             //Devolver los datos del usuario logeado
             if (params.gethash) { //Generar token con objeto del usuario
                 //devolver token de jwt
+                console.log(employee);
                 res.status(200).send({
                   employee: employee,
                   token: jwt.createToken(employee)

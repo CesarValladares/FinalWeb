@@ -13,8 +13,6 @@ declare var M: any;
 })
 export class EmployeesComponent implements OnInit {
 
-  //public employees: Employee[];
-
   constructor(private employeeService: EmployeeService) { }
 
   ngOnInit() {
@@ -40,15 +38,12 @@ export class EmployeesComponent implements OnInit {
   }
 
   getEmployees(){
-    console.log('1');
     this.employeeService.getEmployees()
       .subscribe(
         response => {
-        console.log('2');
         this.employeeService.employees = response as Employee[];
         console.log(response);
       } , error => {
-        console.log('3');
         console.log(error);
       });
   }
