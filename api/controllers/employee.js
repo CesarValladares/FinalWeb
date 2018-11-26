@@ -177,6 +177,22 @@ in the request parameters send the next atributes in the express url
 */
 employeeController.readEmployee = (req, res) => {
 
+  var employeeId = req.params.id;
+
+  Employee.findById(employeeId, (err, employee) => {
+    if (err) {
+      res.status(500).send({message: 'ERROR EN LA PETICION'});
+
+    } else {
+      if (!employee) {
+        res.status(404).send({message: 'EL CLIENTE NO EXISTE'});
+
+      } else {
+        res.status(200).send({employee: employee});
+      }
+    }
+  });
+/*
   if (!req.headers.role) {
     res.status(500).send({message: 'ERROR EN LA PETICION_'});
 
@@ -201,7 +217,7 @@ employeeController.readEmployee = (req, res) => {
           }
         });
     }
-  }
+  }*/
 }
 
 
@@ -221,32 +237,17 @@ in the request parameters send the next atributes in the express url
 employeeController.readEmployees = (req, res) => {
   console.log('EMPLOYEES REQ');
 
-  if (req.params.page) {
-    var page = req.params.page;
-  } else {
-    var page = 1;
-  }
-  var itemsPerPage = 3;
-
   Employee.find({status: 'ACTIVE_EMPLOYEE'}).sort('name').exec(function(err, employees){
     if (err) {
       res.status(500).send({message: 'ERROR EN LA PETICION'});
 
     } else {
       if (employees) {
-        Employee.count({status: 'ACTIVE_EMPLOYEE'}, function(err, count) {
-           if (err) {
-             res.status(500).send({message: 'ERROR EN LA PETICION'});
+        res.json(employees);
+        //res.status(404).send({message: 'HOLI'});
 
-           } else {
-             return res.status(500).send({
-               total: count,
-               employees: employees
-             });
-           }
-        });
       } else {
-        res.status(404).send({message: 'NO HAY ARTISTAS'});
+        res.status(404).send({message: 'NO HAY EMPLEADOS'});
       }
     }
   });

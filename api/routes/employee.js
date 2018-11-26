@@ -12,8 +12,9 @@ var md_upload = multipart({uploadDir: './uploads/employees'});
 
 api.post('/employee/:m_id', md_auth.ensureAuth,employeeController.createEmployee);
 api.post('/employee-login', employeeController.loginEmployee);
-api.get('/employee/:id', md_auth.ensureAuth, employeeController.readEmployee);
-api.get('/employees/:page?', employeeController.readEmployees);
+//api.get('/employee/:id', md_auth.ensureAuth, employeeController.readEmployee);
+api.get('/employee/:id', employeeController.readEmployee);
+api.get('/employees', employeeController.readEmployees);
 api.put('/employee/:id/:admin', md_auth.ensureAuth, employeeController.updateEmployee);
 api.delete('/employee/:id/:admin', md_auth.ensureAuth, employeeController.deleteEmployee);
 api.post('/upload-image-employee/:id', [md_auth.ensureAuth, md_upload] , employeeController.uploadImage);
