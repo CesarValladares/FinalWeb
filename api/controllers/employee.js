@@ -151,7 +151,7 @@ employeeController.loginEmployee = (req, res) => {
                 });
             }
             else {
-              res.status(200).send({employee});
+              res.send(JSON.stringify({employee}));
             }
           }
           else {

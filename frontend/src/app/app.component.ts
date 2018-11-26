@@ -39,7 +39,9 @@ export class AppComponent implements OnInit {
     //Conseguir datos de usuario identificado
     this.employeeService.signup(this.employee).subscribe(
       response => {
-        let identity = response.employee;
+        var myJSON = JSON.stringify(response);
+        var iden = JSON.parse(myJSON);
+        let identity = iden.employee;
         this.identity = identity;
 
         if(!this.identity._id){
@@ -52,7 +54,9 @@ export class AppComponent implements OnInit {
           //Conseguir token para enviarselo a cada petición
           this.employeeService.signup(this.employee, 'true').subscribe(
             response => {
-              let token = response.token;
+              var myJSON2 = JSON.stringify(response);
+              var iden2 = JSON.parse(myJSON2);
+              let token = iden2.token;
               this.token = token;
 
               if(this.token.length <= 1){
