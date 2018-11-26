@@ -193,6 +193,9 @@ in the request body send the next atributes
   gethash: true (this is mandatory and with this you reciebe the token, if not, just reciebe employee)
 */
 clientController.loginClient = (req, res) => {
+
+  console.log('LOGIN CLIENT REQUEST');
+
   var params = req.body;
   var email = params.email;
   var password = params.password;
@@ -200,16 +203,16 @@ clientController.loginClient = (req, res) => {
   Client.findOne({email: email.toLowerCase()}, (err, client) => {
     if (err) {
       res.status(500).send({message: 'ERROR EN LA PETICION'});
-    }
-    else {
+
+    } else {
       if (!client) {
         res.status(404).send({message: 'EL CLIENTE NO EXISTE'});
-      }
-      else {
+
+      } else {
         //Comprobar contraseña
         bcrypt.compare(password, client.password, (err, check) => {
           if (check) {
-            //Devolver los datos del usuario logeado
+            //Devolver los datos del cliente logeado
             if (params.gethash) { //Generar token con objeto del usuario
                 //devolver token de jwt
                 res.status(200).send({
@@ -218,7 +221,7 @@ clientController.loginClient = (req, res) => {
                 });
             }
             else {
-              res.status(200).send({client});
+              res.status(200).send(JSON.stringify({client}));
             }
           }
           else {
@@ -309,10 +312,7 @@ clientController.readClients = (req, res) => {
         }
         else {
           if (clients) {
-            return res.status(500).send({
-              total_items: total,
-              clients: clients
-            });
+            res.json(clients);
           }
           else {
             res.status(404).send({message: 'NO HAY CLIENTES'});

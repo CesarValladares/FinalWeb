@@ -123,8 +123,8 @@ in the request body send the next atributes
 */
 employeeController.loginEmployee = (req, res) => {
 
-  console.log('ENTRA A LOGIN');
-  console.log(req.body);
+  console.log('LOGIN EMPLOYEE REQUEST');
+
   var params = req.body;
   var email = params.email;
   var password = params.password;
@@ -151,7 +151,7 @@ employeeController.loginEmployee = (req, res) => {
                 });
             }
             else {
-              res.send(JSON.stringify({employee}));
+              res.status(200).send(JSON.stringify({employee}));
             }
           }
           else {
