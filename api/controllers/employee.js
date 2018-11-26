@@ -219,7 +219,38 @@ in the request parameters send the next atributes in the express url
   page: number of the page (this is not mandatory)
 */
 employeeController.readEmployees = (req, res) => {
+  console.log('EMPLOYEES REQ');
 
+  if (req.params.page) {
+    var page = req.params.page;
+  } else {
+    var page = 1;
+  }
+  var itemsPerPage = 3;
+
+  Employee.find({status: 'ACTIVE_EMPLOYEE'}).sort('name').exec(function(err, employees){
+    if (err) {
+      res.status(500).send({message: 'ERROR EN LA PETICION'});
+
+    } else {
+      if (employees) {
+        Employee.count({status: 'ACTIVE_EMPLOYEE'}, function(err, count) {
+           if (err) {
+             res.status(500).send({message: 'ERROR EN LA PETICION'});
+
+           } else {
+             return res.status(500).send({
+               total: count,
+               employees: employees
+             });
+           }
+        });
+      } else {
+        res.status(404).send({message: 'NO HAY ARTISTAS'});
+      }
+    }
+  });
+  /*
   if (!req.headers.role) {
     res.status(500).send({message: 'ERROR EN LA PETICION'});
 
@@ -259,6 +290,7 @@ employeeController.readEmployees = (req, res) => {
       });
     }
   }
+  */
 }
 
 
