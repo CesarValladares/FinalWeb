@@ -15,6 +15,7 @@ app.get('/', function(req, res){
 });
 
 
+
 //Cargar rutas
 var employee_routes = require('./routes/employee');
 var client_routes = require('./routes/client');
