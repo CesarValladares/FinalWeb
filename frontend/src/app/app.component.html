@@ -26,7 +26,7 @@
     <form #loginForm="ngForm" (ngSubmit)="onSubmit()" class="col-md-7">
       <p>
         <label>Correo electrónico: </label>
-        <input type="text"  #email="ngModel" [(ngModel)]="employee.email" name="email" [ngModelOptions]="{standalone: true}" class="form-control" required>
+        <input type="email"  #email="ngModel" [(ngModel)]="employee.email" name="email" [ngModelOptions]="{standalone: true}" class="form-control" required>
         <span *ngIf="!email.valid && email.touched"> El email es obligatorio </span>
       </p>
       <p>
