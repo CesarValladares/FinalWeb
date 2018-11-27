@@ -15,13 +15,27 @@ body{
     left: 50%;
     transform: translate(-50%,-50%);
     color: white;
-    
+    background-color: #333;
+    padding: 30px;
+    border-radius: 4px;  
+
 }
 
 .login-box h1{
-    
+    text-align: center;
     font-size: 30px;
     margin-bottom: 20px;
+}
+
+.login-box .buttonBox {
+    margin-left: auto;
+    margin-right: auto;
+    width: 150px;
+    margin-top: 30px;
+}
+
+.login-box button {
+    width: 150px;
 }
 
 .textbox{
@@ -30,10 +44,12 @@ body{
     font-size: 20px;
     padding: 8px 0;
     margin: 8px 0;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .textbox i{
-    width: 26px;
+    width: 10%;
     float: left;
     text-align: center;
 }
@@ -45,11 +61,12 @@ body{
     color: white;
     font-size: 80%;
     float: left;
-    margin: 0 10px;
+    width: 80%;
+    margin-left: 5%;
 }
 
 .button{
-    background-color: #4CAF50; /* Green */
+    background-color: #418443; /* Green */
     border: none;
     color: white;
     padding: 15px 32px;
@@ -57,5 +74,22 @@ body{
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    
+    transition: background-color 0.5s ease;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #4CAF50;
+}
+
+#loginBox .button {
+    width: 100%;
+    margin-top: 10px;
+}
+
+@media only screen and (max-width: 600px) {
+    .textbox input {
+        width: 70%;
+        margin-left: 15%;
+    }
 }
