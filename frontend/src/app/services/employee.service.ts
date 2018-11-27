@@ -44,7 +44,10 @@ export class EmployeeService {
   }
 
   putEmployee(employee: Employee) {
-    return this.http.put(this.URL_API + `/${employee._id}`, employee);
+    //console.log(this.getToken());
+    var token = this.getToken();
+    let headers = new HttpHeaders({'Content-Type': 'application/json', 'Authorization': token});
+    return this.http.put(this.URL_API + 'employee/' + `${employee._id}`, employee, {headers: headers});
   }
 
   deleteEmployee (_id: string) {

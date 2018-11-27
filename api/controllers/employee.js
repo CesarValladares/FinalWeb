@@ -315,69 +315,23 @@ in the request parameters send the next atributes in the express url
 */
 employeeController.updateEmployee = (req, res) => {
 
-  if (!req.headers.role) {
-    res.status(500).send({message: 'ERROR EN LA PETICION'});
+  console.log('UPDATE REQUEST');
 
-  } else {
-    if (req.headers.role != 'ROLE_ADMIN') {
-      res.status(500).send({message: 'ERROR EN LA PETICION'});
+  var employeeId = req.params.id;
+  var update = req.body;
+
+  Employee.findByIdAndUpdate(employeeId, update, (err, employeeUpdated) => {
+    if (err) {
+      res.status(500).send({message: 'Error al actualizar empleado'});
 
     } else {
-      var employeeId = req.params.id;
-      var adminId = req.params.admin;
-      var update = req.body;
-
-      Employee.findByIdAndUpdate(employeeId, update, (err, employeeUpdated) => {
-        if (err) {
-          res.status(500).send({message: 'Error al actualizar empleado'});
-
-        } else {
-          if (!employeeUpdated) {
-            res.status(404).send({message: 'No se ha podido actualizar al empleado'});
-          } else {
-
-            var u_employee = new UEmployee();
-            u_employee.date = new Date();
-            u_employee.before = employeeUpdated;
-            u_employee.employee = employeeUpdated._id;
-            u_employee.mannager = adminId;
-
-
-            Employee.findOne({_id: employeeId}, (err, upEmployee) => {
-              if (err) {
-                res.status(500).send({message: 'ERROR EN LA PETICION'});
-
-              } else {
-                if (!upEmployee) {
-                  res.status(404).send({message: 'EL EMPLEADO NO EXISTE'});
-
-                } else {
-                  u_employee.after = upEmployee;
-
-                  //Guarar registro de cliente borrado en BD
-                  u_employee.save((err, uemployeeStored) => {
-                    if (err) {
-                      res.status(500).send({message: 'ERROR AL GUARDAR REGISTRO DE CLIENTE ACTUALIZADO'});
-
-                    } else {
-                      if (!uemployeeStored) {
-                        res.status(404).send({message: 'NO SE HA REGISTRADO LA ACTUALIZACION DEL CLIENTE'});
-
-                      } else {
-                        //RETURN UPDATED EMPLOYEE
-                        res.status(200).send({upEmployee});
-                      }
-                    }
-                  });
-                }
-              }
-            });
-          }
-        }
-      });
+      if (!employeeUpdated) {
+        res.status(404).send({message: 'No se ha podido actualizar al empleado'});
+      } else {
+        res.status(200).send({employeeUpdated});
+      }
     }
-  }
-
+  });
 }
 
 

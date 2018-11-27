@@ -15,7 +15,7 @@ api.post('/employee-login', employeeController.loginEmployee);
 //api.get('/employee/:id', md_auth.ensureAuth, employeeController.readEmployee);
 api.get('/employee/:id', employeeController.readEmployee);
 api.get('/employees', employeeController.readEmployees);
-api.put('/employee/:id/:admin', md_auth.ensureAuth, employeeController.updateEmployee);
+api.put('/employee/:id', md_auth.ensureAuth, employeeController.updateEmployee);
 api.delete('/employee/:id/:admin', md_auth.ensureAuth, employeeController.deleteEmployee);
 api.post('/upload-image-employee/:id', [md_auth.ensureAuth, md_upload] , employeeController.uploadImage);
 api.get('/get-image-employee/:imageFile', md_auth.ensureAuth, employeeController.getImageFile);
