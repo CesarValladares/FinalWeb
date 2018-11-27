@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { EmployeeService } from './services/employee.service';
+import { BookService } from './services/book.service';
 import { Employee } from './models/employee';
+import { Book } from './models/book';
 import { NgForm } from '@angular/forms';
 
 
@@ -8,7 +10,7 @@ import { NgForm } from '@angular/forms';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [EmployeeService]
+  providers: [EmployeeService, BookService]
 })
 
 export class AppComponent implements OnInit {
