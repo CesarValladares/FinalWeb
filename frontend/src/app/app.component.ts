@@ -19,7 +19,9 @@ export class AppComponent implements OnInit {
   public token;
   public errorMessage;
   public alertRegister;
-  public bookWindow: false;
+  public bookWindow: boolean = false;
+  public employeeWindow: boolean = true;
+
 
   constructor(
     private employeeService:EmployeeService
@@ -104,5 +106,16 @@ export class AppComponent implements OnInit {
     localStorage.clear();
     this.identity = null;
     this.token = null;
+  }
+
+
+  public showBooks(){
+    this.bookWindow = true;
+    this.employeeWindow = false;
+  }
+
+  public showEmployees(){
+    this.bookWindow = false;
+    this.employeeWindow = true;
   }
 }

@@ -35,7 +35,7 @@ export class BookService {
     //console.log(this.getToken());
     var token = this.getToken();
     let headers = new HttpHeaders({'Content-Type': 'application/json', 'Authorization': token});
-    return this.http.put(this.URL_API + 'Book/' + `${Book._id}`, Book, {headers: headers});
+    return this.http.put(this.URL_API + 'book/' + `${Book._id}`, Book, {headers: headers});
   }
 
   deleteBook (_id: string) {

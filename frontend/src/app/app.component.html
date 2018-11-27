@@ -1,24 +1,36 @@
+
 <nav class="nav-wrapper green darken-4">
   <div class="container">
     <a href="/" class="brand-logo">BIBLIOTECA VIRTUAL</a>
    
   </div>
   <ul> 
-      <li>Elemento 1 </li> 
-      <li>Elemento 2 </li> 
+     
+      <span class="btn blue right" (click)="showBooks()">Books</span>
+      <span class="btn blue right" (click)="showEmployees()">Employees</span>
+    
   </ul>
     
 </nav>
 
+
 <div *ngIf="identity" class="navigation col-lg-1">
-    <app-employees></app-employees>
+   
+    <div *ngIf="bookWindow">
+        <app-books></app-books>
+    </div>
+    <div *ngIf="employeeWindow">
+        <app-employees></app-employees>
+    </div>
     <br>
-  <span class="btn red right" (click)="logout()">
+    <span class="btn red right" (click)="logout()">
       Cerrar Sesión
       <i class="material-icons">close</i>
     </span>
   
 </div>
+
+    
 
 <!-- FORMULARIOS LOGIN-->
 <div class="container">
@@ -58,3 +70,8 @@
   </div>
 </div>
 <!-- FORMULARIOS LOGIN-->
+
+
+
+    
+    
