@@ -117,6 +117,8 @@ in the request parameters send the next atributes in the express url
   author: id_of_author (this is not mandatory) -> used to get the list of books by author
 */
 bookController.readBooks = (req, res) => {
+
+  console.log('BOOKS REQ');
   var authorId = req.params.author;
 
   if (!authorId) { //Sacar todos los libros de BD

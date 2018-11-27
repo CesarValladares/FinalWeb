@@ -17,7 +17,18 @@ export class BooksComponent implements OnInit {
 
   ngOnInit() {
     console.log('INICIANDO LIBROS');
-    //this.getBooks();
+    this.getBooks();
+  }
+
+  getBooks(){
+    this.bookService.getBooks()
+      .subscribe(
+        response => {
+        this.bookService.books = response as Books[];
+        console.log(response);
+      } , error => {
+        console.log(error);
+      });
   }
 
   getBooks(){
