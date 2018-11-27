@@ -38,6 +38,7 @@ export class ClientsComponent implements OnInit {
 
       }, err => {
         alert('El cliente no esta creado correctamente');
+        console.log(err);
       });
     }
   }

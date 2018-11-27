@@ -1,7 +1,7 @@
 
-<div class= "login-box" >
-  <h1>Iniciar sesión</h1>
-  <form #clientForm="ngForm" (ngSubmit)="addClient(clientForm)">
+<div class= "login-box-registrar">
+  <h1>Registrarse</h1>
+  <form #loginForm="ngForm" (ngSubmit)="addClient(loginForm)">
     <div class="textbox">
 
       <input type="text" placeholder="Name" name ="name" #name="ngModel" [(ngModel)]="clientService.selectedClient.name">
@@ -32,18 +32,10 @@
       <input type="text" placeholder="Image" name="image" #name="ngModel" [(ngModel)]="clientService.selectedClient.image">
 
     </div>
-    <div class="textbox">
-
-      <input type="text" placeholder="Role" name="role" #name="ngModel" [(ngModel)]="clientService.selectedClient.role">
-
-    </div>
-    <div class="textbox">
-
-      <input type="text" placeholder="Balance" name="balance" #name="ngModel" [(ngModel)]="clientService.selectedClient.balance">
-
-    </div>
 
     <input type="submit" class="btn btn btn-success" value = "Registrarse">
   </form>
 
 </div>
+
+
