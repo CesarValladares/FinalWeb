@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
   public token;
   public errorMessage;
   public alertRegister;
+  public bookWindow: false;
 
   constructor(
     private employeeService:EmployeeService
