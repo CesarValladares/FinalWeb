@@ -15,8 +15,8 @@ export class BookService {
   public identity;
   public token;
   readonly URL_API = 'http://localhost:3977/api/';
-  
-  
+
+
   constructor(private http: HttpClient) {
     this.selectedBook = new Book();
    }
@@ -24,28 +24,28 @@ export class BookService {
    getBooks() {
     let headers = new HttpHeaders({'Authorization': this.getToken(),
                                    'Content-Type': 'application/json'});
-    return this.http.get(this.URL_API + 'Books',{headers: headers});
+    return this.http.get(this.URL_API + 'books',{headers: headers});
   }
 
   /*LLAMAR ULR PARA CREAR USUARIO*/
   postBook(Book: Book) {
     let headers = new HttpHeaders({'Authorization': this.getToken(),
                                    'Content-Type': 'application/json'});
-    return this.http.post(this.URL_API + 'Book', Book, {headers: headers});
+    return this.http.post(this.URL_API + 'book', Book, {headers: headers});
   }
 
   /*UPDATE AN Book*/
   putBook(Book: Book) {
     let headers = new HttpHeaders({'Authorization': this.getToken(),
                                    'Content-Type': 'application/json'});
-    return this.http.put(this.URL_API + 'Book/' + `${Book._id}`, Book, {headers: headers});
+    return this.http.put(this.URL_API + 'book/' + `${Book._id}`, Book, {headers: headers});
   }
 
   deleteBook (_id: string) {
     console.log('ID::' + _id);
     let headers = new HttpHeaders({'Authorization': this.getToken(),
                                    'Content-Type': 'application/json'});
-    return this.http.delete(this.URL_API + 'Book/' + `${_id}`, {headers: headers});
+    return this.http.delete(this.URL_API + 'book/' + `${_id}`, {headers: headers});
   }
 
   getIdentity(){
