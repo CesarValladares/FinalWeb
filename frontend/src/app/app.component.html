@@ -1,14 +1,17 @@
-<nav class="nav-wrapper red">
+<nav class="nav-wrapper green darken-4">
   <div class="container">
     <a href="/" class="brand-logo">BIBLIOTECA VIRTUAL</a>
   </div>
 </nav>
 
 <div *ngIf="identity" class="navigation col-lg-1">
-  <span class="btn btn-warning" (click)="logout()">
+    <app-employees></app-employees>
+    <br>
+  <span class="btn red right" (click)="logout()">
       Cerrar Sesión
+      <i class="material-icons">close</i>
     </span>
-  <app-employees></app-employees>
+  
 </div>
 
 <!-- FORMULARIOS LOGIN-->
@@ -33,7 +36,7 @@
         <label>Contraseña: </label>
         <input type="password" #password="ngModel" [(ngModel)]="employee.password" name="password" [ngModelOptions]="{standalone: true}" class="form-control" required>
       </p>
-      <input type="submit" value="Entrar" class="btn btn-primary" />
+      <input type="submit" value="Entrar" class="btn btn-primary #66bb6a green lighten-1" />
     </form>
   </div>
   <!-- LOGIN -->
