@@ -33,6 +33,13 @@ export class ClientService {
     return this.http.post(this.URL_API + 'client-login', params, {headers: headers});
   }
 
+  addCliente(newCliente) {
+    console.log(newCliente);
+    console.log('Cliente');
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+    return this.http.post(this.URL_API + 'clients', newCliente, {headers: headers});
+  }
+
   getClients() {
     return this.http.get(this.URL_API + 'clients');
   }

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ClientService } from '../../services/clientServices/client.service';
-import { NgForm } from '@angular/forms';
+import { NgForm, EmailValidator } from '@angular/forms';
 import { Client } from 'src/app/models/client';
 import { toBase64String } from '@angular/compiler/src/output/source_map';
+import { TouchSequence } from 'selenium-webdriver';
 
 declare var M: any;
 
@@ -18,6 +19,7 @@ export class ClientsComponent implements OnInit {
   ngOnInit() {
     this.getClients();
   }
+
 
   addClient(form: NgForm) {
     if (form.value._id) {
