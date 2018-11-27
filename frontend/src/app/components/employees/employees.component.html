@@ -10,13 +10,13 @@
                   <input type="text" name="name" #name="ngModel" [(ngModel)]="employeeService.selectedEmployee.name" placeholder="Enter your name">
                 </div>
                 <div class="input-field col s12">
-                    <input type="text" name="position" #position="ngModel" [(ngModel)]="employeeService.selectedEmployee.position" placeholder="Enter your position">
+                    <input type="text" name="position" #position="ngModel" [(ngModel)]="employeeService.selectedEmployee.surname" placeholder="Enter your position">
                 </div>
                 <div class="input-field col s12">
-                    <input type="text" name="office" #office="ngModel" [(ngModel)]="employeeService.selectedEmployee.office" placeholder="Enter your office">
+                    <input type="text" name="office" #office="ngModel" [(ngModel)]="employeeService.selectedEmployee.email" placeholder="Enter your office">
                 </div>
                 <div class="input-field col s12">
-                    <input type="text" name="salary" #salary="ngModel" [(ngModel)]="employeeService.selectedEmployee.salary" placeholder="Enter your salary">
+                    <input type="text" name="salary" #salary="ngModel" [(ngModel)]="employeeService.selectedEmployee.username" placeholder="Enter your salary">
                 </div>
 
                 <div class="card-action">
@@ -38,11 +38,10 @@
           <th>Surname</th>
           <th>Email</th>
           <th>Username</th>
-          <th>Operations</th>
-          <th>Surname</th>
-          <th>Email</th>
-          <th>Username</th>
-          <th>Operations</th>
+          <th>Image</th>
+          <th>Role</th>
+          <th>Status</th>
+         
         </thead>
         <tbody>
           <tr *ngFor="let employee of employeeService.employees">
@@ -50,7 +49,8 @@
             <td>{{ employee.surname }}</td>
             <td>{{ employee.email }}</td>
             <td>{{ employee.username }}</td>
-            <td>{{ employee.password }}</td>
+            <br>
+            <!-- <td>{{ employee.password }}</td> -->
             <td>{{ employee.image }}</td>
             <td>{{ employee.role }}</td>
             <td>{{ employee.status }}</td>

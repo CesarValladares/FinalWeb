@@ -54,6 +54,7 @@ export class EmployeesComponent implements OnInit {
 
   deleteEmployee(_id: string){
     if(confirm('Are you sure you want to delete it?')){
+      console.log(_id);
       this.employeeService.deleteEmployee(_id)
         .subscribe(res => {
           M.toast({html: 'Employee Deleted'});

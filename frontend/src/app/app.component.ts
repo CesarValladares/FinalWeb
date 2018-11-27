@@ -10,6 +10,7 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./app.component.css'],
   providers: [EmployeeService]
 })
+
 export class AppComponent implements OnInit {
   title = 'frontend';
   public employee: Employee;
@@ -82,13 +83,16 @@ export class AppComponent implements OnInit {
         }
       },
       error => {
+        alert("El usuario no está correctamente identificado");
+        
+        /*
         var errorMessage = <any>error;
 
         if(errorMessage != null){
           var body = JSON.parse(error._body);
           this.errorMessage = body.message;
           console.log(error);
-        }
+        }*/
     });
   }
 
