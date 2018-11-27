@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
   public errorMessage;
   public alertRegister;
   public bookWindow: boolean = false;
-  public employeeWindow: boolean = true;
+  public employeeWindow: boolean = false;
 
 
   constructor(
