@@ -162,7 +162,7 @@ rentController.readRents = (req, res) => {
       if (!rents) {
         res.status(404).send({message: 'NO HAY RENTAS'});
       } else {
-        res.status(200).send({rents});
+        res.json(rents);
       }
     }
   });

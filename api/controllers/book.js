@@ -157,7 +157,7 @@ bookController.readBooks = (req, res) => {
       if (!books) {
         res.status(404).send({message: 'NO HAY LIBROS'});
       } else {
-        res.status(200).send({books});
+        res.json(books);
       }
     }
   });

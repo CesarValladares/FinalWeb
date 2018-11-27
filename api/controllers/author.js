@@ -137,12 +137,7 @@ in the request parameters send the next atributes in the express url
 */
 authorController.readAuthors = (req, res) => {
 
-  if (req.params.page) {
-    var page = req.params.page;
-  } else {
-    var page = 1;
-  }
-  var itemsPerPage = 3;
+  console.log('AUTHORS REQ');
 
   Author.find({status: 'ACTIVE'}).sort('name').exec(function(err, authors){
     if (err) {
@@ -150,19 +145,9 @@ authorController.readAuthors = (req, res) => {
 
     } else {
       if (authors) {
-        Author.count({status: 'ACTIVE'}, function(err, count) {
-           if (err) {
-             res.status(500).send({message: 'ERROR EN LA PETICION'});
-
-           } else {
-             return res.status(500).send({
-               total: count,
-               authors: authors
-             });
-           }
-        });
+        res.json(authors);
       } else {
-        res.status(404).send({message: 'NO HAY ARTISTAS'});
+        res.status(404).send({message: 'NO HAY AUTORES'});
       }
     }
   });
