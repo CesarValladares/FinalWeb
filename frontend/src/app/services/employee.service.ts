@@ -40,7 +40,12 @@ export class EmployeeService {
   }
 
   postEmployee(employee: Employee) {
-    return this.http.post(this.URL_API, employee);
+    console.log('Crear employee a BD');
+    var token = this.getToken();
+    let headers = new HttpHeaders({"Access-Control-Allow-Origin" : "*",
+                                   "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Methods, Access-Control-Allow-Headers, Authorization, X-Requested-With",
+                                   "Access-Control-Allow-Methods" : "GET,POST,PUT,DELETE,OPTIONS"});
+    return this.http.post(this.URL_API + 'employee', employee, {headers: headers});
   }
 
   putEmployee(employee: Employee) {

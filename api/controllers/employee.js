@@ -29,76 +29,50 @@ in the request parameters send the next atributes in the express url
 */
 employeeController.createEmployee = (req, res) => {
 
-  if (!req.headers.role) {
-    res.status(500).send({message: 'ERROR EN LA PETICIO'});
+  console.log('CLIENT CREATION');
 
-  } else {
-    if (req.headers.role === 'ROLE_ADMIN') {
-      var mannagerId = req.params.m_id;
+/*
+  var employee = new Employee();
+  var params = req.body;
 
-      var employee = new Employee();
-      var params = req.body;
+  employee.name = params.name;
+  employee.surname = params.surname;
+  employee.email = params.email.toLowerCase();
+  employee.username = params.username;
+  employee.role = 'ROLE_EMPLOYEE';
+  employee.image = 'null';
+  employee.status = 'ACTIVE_EMPLOYEE';
 
-      employee.name = params.name;
-      employee.surname = params.surname;
-      employee.email = params.email.toLowerCase();
-      employee.username = params.username;
-      employee.role = 'ROLE_EMPLOYEE';
-      employee.image = 'null';
-      employee.status = 'ACTIVE_EMPLOYEE';
+  if (params.password) {
+    //Encriptar contraseña y guardar datos
+    bcrypt.hash(params.password, null, null, function(err, hash){
+      employee.password = hash;
+      if (employee.name != null && employee.surname != null && employee.email != null) {
 
-      if (params.password) {
-        //Encriptar contraseña y guardar datos
-        bcrypt.hash(params.password, null, null, function(err, hash){
-          employee.password = hash;
-          if (employee.name != null && employee.surname != null && employee.email != null) {
+        //Guarar usuario en BD
+        employee.save((err, employeeStored) => {
+          if (err) {
+            res.status(500).send({message: 'ERROR AL GUARDAR EMPLEADO'});
 
-            //Guarar usuario en BD
-            employee.save((err, employeeStored) => {
-              if (err) {
-                res.status(500).send({message: 'ERROR AL GUARDAR EMPLEADO'});
+          }  else {
+            if (!employeeStored) {
+              res.status(404).send({message: 'NO SE HA REGISTRADO AL EMPLEADO'});
 
-              }  else {
-                if (!employeeStored) {
-                  res.status(404).send({message: 'NO SE HA REGISTRADO AL EMPLEADO'});
-
-                } else {
-                  var c_employee = new CEmployee();
-                  c_employee.date = new Date();
-                  //c_employee.mannager = mannagerId;
-                  c_employee.employee = employeeStored._id;
-                  c_employee.mannager = req.params.m_id;
-
-                  //Guarar registro de mng en BD
-                  c_employee.save((err, cemployeeStored) => {
-                    if (err) {
-                      res.status(500).send({message: 'ERROR AL GUARDAR REGISTRO EMPLEADO'});
-
-                    } else {
-                      if (!cemployeeStored) {
-                        res.status(404).send({message: 'NO SE HA REGISTRADO EMPLEADO'});
-
-                      } else {
-                        res.status(200).send({employee: employeeStored});
-                      }
-                    }
-                  });
-                }
-              }
-            });
-          }
-          else {
-            res.status(200).send({message: 'Introduce todos los campos'});
+            } else {
+              res.send(employeeStored);
+            }
           }
         });
       }
-      else{
-        res.status(500).send({message: 'Introduce la contraseña'});
+      else {
+        res.status(200).send({message: 'Introduce todos los campos'});
       }
-    } else {
-      res.status(500).send({message: 'ERROR EN LA PETICION'});
-    }
+    });
   }
+  else{
+    res.send({message: 'Introduce la contraseña'});
+  }
+  */
 }
 
 
@@ -191,7 +165,7 @@ employeeController.readEmployee = (req, res) => {
         res.status(404).send({message: 'EL CLIENTE NO EXISTE'});
 
       } else {
-        res.status(200).send({employee: employee});
+        res.send(employee);
       }
     }
   });
@@ -287,7 +261,7 @@ employeeController.updateEmployee = (req, res) => {
       if (!employeeUpdated) {
         res.status(404).send({message: 'No se ha podido actualizar al empleado'});
       } else {
-        res.status(200).send({employeeUpdated});
+        res.status(200).send(employeeUpdated);
       }
     }
   });
@@ -310,65 +284,22 @@ in the request parameters send the next atributes in the express url
   admin: id_of_admin (this is mandatory)
 */
 employeeController.deleteEmployee = (req,res) => {
+  var employeeId = req.params.id;
+  var update = {status: 'INACTIVE_EMPLOYEE'};
 
-  if (!req.headers.role) {
-    res.status(500).send({message: 'ERROR EN LA PETICION'});
-
-  } else {
-    if (req.headers.role != 'ROLE_ADMIN') {
-      res.status(500).send({message: 'ERROR EN LA PETICION'});
+  Employee.findByIdAndUpdate(employeeId, update, (err, employeeIdUpdated) => {
+    if (err) {
+      res.status(500).send({message: 'Error al eliminar empleado'});
 
     } else {
-      var employeeId = req.params.id;
-      var update = {status: 'INACTIVE_EMPLOYEE'};
+      if (!employeeIdUpdated) {
+        res.status(404).send({message: 'No se ha podido eliminar al cliente'});
 
-      Employee.findByIdAndUpdate(employeeId, update, (err, employeeIdUpdated) => {
-        if (err) {
-          res.status(500).send({message: 'Error al eliminar empleado'});
-
-        } else {
-          if (!employeeIdUpdated) {
-            res.status(404).send({message: 'No se ha podido eliminar al cliente'});
-
-          } else {
-            var d_employee = new DEmployee();
-            d_employee.date = new Date();
-            d_employee.employee = employeeId;
-            d_employee.mannager = req.params.admin;
-
-            Employee.findOne({_id: employeeId}, (err, delEmployee) => {
-              if (err) {
-                res.status(500).send({message: 'ERROR EN LA PETICION'});
-
-              } else {
-                if (!delEmployee) {
-                  res.status(404).send({message: 'EL EMPLEADO NO EXISTE'});
-
-                } else {
-                  d_employee.client = delEmployee;
-
-                  //Guarar registro de empleado eliminado en BD
-                  d_employee.save((err, demployeeStored) => {
-                    if (err) {
-                      res.status(500).send({message: 'ERROR AL GUARDAR REGISTRO DE EMPLEADO INACTIVO'});
-
-                    } else {
-                      if (!demployeeStored) {
-                        res.status(404).send({message: 'NO SE HA REGISTRADO DEL EMPLEADO INACTIVO'});
-
-                      } else {
-                        res.status(200).send({delEmployee});
-                      }
-                    }
-                  });
-                }
-              }
-            });
-          }
-        }
-      });
+      } else {
+        res.send({employeeIdUpdated});
+      }
     }
-  }
+  });
 }
 
 
