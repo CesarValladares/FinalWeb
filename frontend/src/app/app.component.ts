@@ -47,6 +47,7 @@ export class AppComponent implements OnInit {
 
         if(!this.identity._id){
           alert("El usuario no está correctamente identificado");
+
         } else {
           console.log(this.identity._id);
           // Crear elemento en el local storage para tener al usuario en sesion
@@ -84,7 +85,7 @@ export class AppComponent implements OnInit {
       },
       error => {
         alert("El usuario no está correctamente identificado");
-        
+        console.log(error);
         /*
         var errorMessage = <any>error;
 

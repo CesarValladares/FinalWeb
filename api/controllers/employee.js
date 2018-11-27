@@ -22,82 +22,56 @@ This function returns the created employee (as a JSON OBJECT)
 IMPLEMENTED WITH post
 in header send the next params
   Autorization: token_of_the_user
-  role: ROLE_ADMIN (It is stored in the client or employee atributes as role: )
 
-in the request parameters send the next atributes in the express url
-  m_id: id_of_the_admin (this is mandatory)
+in the body send the next params
+  name:
+  surname:
+  email:
+  username:
+  password:
 */
 employeeController.createEmployee = (req, res) => {
 
-  if (!req.headers.role) {
-    res.status(500).send({message: 'ERROR EN LA PETICIO'});
+  console.log('CLIENT CREATION REQ');
+  var employee = new Employee();
+  var params = req.body;
 
-  } else {
-    if (req.headers.role === 'ROLE_ADMIN') {
-      var mannagerId = req.params.m_id;
+  employee.name = params.name;
+  employee.surname = params.surname;
+  employee.email = params.email.toLowerCase();
+  employee.username = params.username;
+  employee.role = 'ROLE_EMPLOYEE';
+  employee.image = 'null';
+  employee.status = 'ACTIVE_EMPLOYEE';
 
-      var employee = new Employee();
-      var params = req.body;
+  if (params.password) {
+    //Encriptar contraseña y guardar datos
+    bcrypt.hash(params.password, null, null, function(err, hash){
+      employee.password = hash;
+      if (employee.name != null && employee.surname != null && employee.email != null) {
 
-      employee.name = params.name;
-      employee.surname = params.surname;
-      employee.email = params.email.toLowerCase();
-      employee.username = params.username;
-      employee.role = 'ROLE_EMPLOYEE';
-      employee.image = 'null';
-      employee.status = 'ACTIVE_EMPLOYEE';
+        //Guarar usuario en BD
+        employee.save((err, employeeStored) => {
+          if (err) {
+            res.send({message: 'ERROR AL GUARDAR EMPLEADO'});
 
-      if (params.password) {
-        //Encriptar contraseña y guardar datos
-        bcrypt.hash(params.password, null, null, function(err, hash){
-          employee.password = hash;
-          if (employee.name != null && employee.surname != null && employee.email != null) {
+          }  else {
+            if (!employeeStored) {
+              res.send({message: 'NO SE HA REGISTRADO AL EMPLEADO'});
 
-            //Guarar usuario en BD
-            employee.save((err, employeeStored) => {
-              if (err) {
-                res.status(500).send({message: 'ERROR AL GUARDAR EMPLEADO'});
-
-              }  else {
-                if (!employeeStored) {
-                  res.status(404).send({message: 'NO SE HA REGISTRADO AL EMPLEADO'});
-
-                } else {
-                  var c_employee = new CEmployee();
-                  c_employee.date = new Date();
-                  //c_employee.mannager = mannagerId;
-                  c_employee.employee = employeeStored._id;
-                  c_employee.mannager = req.params.m_id;
-
-                  //Guarar registro de mng en BD
-                  c_employee.save((err, cemployeeStored) => {
-                    if (err) {
-                      res.status(500).send({message: 'ERROR AL GUARDAR REGISTRO EMPLEADO'});
-
-                    } else {
-                      if (!cemployeeStored) {
-                        res.status(404).send({message: 'NO SE HA REGISTRADO EMPLEADO'});
-
-                      } else {
-                        res.status(200).send({employee: employeeStored});
-                      }
-                    }
-                  });
-                }
-              }
-            });
-          }
-          else {
-            res.status(200).send({message: 'Introduce todos los campos'});
+            } else {
+              res.send(employeeStored);
+            }
           }
         });
       }
-      else{
-        res.status(500).send({message: 'Introduce la contraseña'});
+      else {
+        res.send({message: 'Introduce todos los campos'});
       }
-    } else {
-      res.status(500).send({message: 'ERROR EN LA PETICION'});
-    }
+    });
+  }
+  else{
+    res.send({message: 'Introduce la contraseña'});
   }
 }
 
@@ -138,26 +112,31 @@ employeeController.loginEmployee = (req, res) => {
         res.status(404).send({message: 'EL EMPLEADO NO EXISTE'});
 
       } else {
-        //Comprobar contraseña
-        bcrypt.compare(password, employee.password, (err, check) => {
-          if (check) {
-            //Devolver los datos del usuario logeado
-            if (params.gethash) { //Generar token con objeto del usuario
-                //devolver token de jwt
-                console.log(employee);
-                res.status(200).send({
-                  employee: employee,
-                  token: jwt.createToken(employee)
-                });
+
+        if (employee.status != 'ACTIVE_ADMIN' && employee.status != 'ACTIVE_EMPLOYEE') {
+          res.status(404).send({message: 'EL USUARIO NO EXISTE'})
+        } else {
+          //Comprobar contraseña
+          bcrypt.compare(password, employee.password, (err, check) => {
+            if (check) {
+              //Devolver los datos del usuario logeado
+              if (params.gethash) { //Generar token con objeto del usuario
+                  //devolver token de jwt
+                  console.log(employee);
+                  res.status(200).send({
+                    employee: employee,
+                    token: jwt.createToken(employee)
+                  });
+              }
+              else {
+                res.status(200).send(JSON.stringify({employee}));
+              }
             }
             else {
-              res.status(200).send(JSON.stringify({employee}));
+              res.status(404).send({message: 'EL EMPLEADO NO HA PODIDO LOGUEARSE'});
             }
-          }
-          else {
-            res.status(404).send({message: 'EL EMPLEADO NO HA PODIDO LOGUEARSE'});
-          }
-        });
+          });
+        }
       }
     }
   });
@@ -172,8 +151,7 @@ Function that returns an employee (as a JSON object) with a given id of the empl
 IMPLEMENTED WITH get
 
 in header send the next params
-  Authorization: token (this is mandatory)
-  role: ROLE_ADMIN (this is mandatory)
+NONE
 
 in the request parameters send the next atributes in the express url
   id: employee_id (this is mandatory)
@@ -191,36 +169,10 @@ employeeController.readEmployee = (req, res) => {
         res.status(404).send({message: 'EL CLIENTE NO EXISTE'});
 
       } else {
-        res.status(200).send({employee: employee});
+        res.send(employee);
       }
     }
   });
-/*
-  if (!req.headers.role) {
-    res.status(500).send({message: 'ERROR EN LA PETICION_'});
-
-  } else {
-    if (req.headers.role != 'ROLE_ADMIN') {
-      res.status(500).send({message: 'ERROR EN LA PETICION'});
-
-    } else {
-        var employeeId = req.params.id;
-
-        Employee.findById(employeeId, (err, employee) => {
-          if (err) {
-            res.status(500).send({message: 'ERROR EN LA PETICION'});
-
-          } else {
-            if (!employee) {
-              res.status(404).send({message: 'EL CLIENTE NO EXISTE'});
-
-            } else {
-              res.status(200).send({employee: employee});
-            }
-          }
-        });
-    }
-  }*/
 }
 
 
@@ -232,10 +184,6 @@ IMPLEMENTED WITH get
 
 in header send the next params
   Authorization: token (this is mandatory)
-  role: ROLE_ADMIN (this is mandatory)
-
-in the request parameters send the next atributes in the express url
-  page: number of the page (this is not mandatory)
 */
 employeeController.readEmployees = (req, res) => {
   console.log('EMPLOYEES REQ');
@@ -254,47 +202,6 @@ employeeController.readEmployees = (req, res) => {
       }
     }
   });
-  /*
-  if (!req.headers.role) {
-    res.status(500).send({message: 'ERROR EN LA PETICION'});
-
-  } else {
-    if (req.headers.role != 'ROLE_ADMIN') {
-      res.status(500).send({message: 'ERROR EN LA PETICION'});
-
-    } else {
-      if (req.params.page) {
-        var page = req.params.page;
-      } else {
-        var page = 1;
-      }
-      var itemsPerPage = 3;
-
-      Employee.find({status: 'ACTIVE_EMPLOYEE'}).sort('name').exec(function(err, employees){
-        if (err) {
-          res.status(500).send({message: 'ERROR EN LA PETICION'});
-
-        } else {
-          if (employees) {
-            Employee.count({status: 'ACTIVE_EMPLOYEE'}, function(err, count) {
-               if (err) {
-                 res.status(500).send({message: 'ERROR EN LA PETICION'});
-
-               } else {
-                 return res.status(500).send({
-                   total: count,
-                   employees: employees
-                 });
-               }
-            });
-          } else {
-            res.status(404).send({message: 'NO HAY ARTISTAS'});
-          }
-        }
-      });
-    }
-  }
-  */
 }
 
 
@@ -307,77 +214,30 @@ IMPLEMENTED WITH put
 
 in header send the next params
   Authorization: token (this is mandatory)
-  role: ROLE_ADMIN (this is mandatory)
 
 in the request parameters send the next atributes in the express url
   id: id_of_employee_to_update (this is mandatory)
-  admin: id_of_admin (this is mandatory)
 */
 employeeController.updateEmployee = (req, res) => {
 
-  if (!req.headers.role) {
-    res.status(500).send({message: 'ERROR EN LA PETICION'});
+  console.log('UPDATE REQUEST');
 
-  } else {
-    if (req.headers.role != 'ROLE_ADMIN') {
-      res.status(500).send({message: 'ERROR EN LA PETICION'});
+  var employeeId = req.params.id;
+  var update = req.body;
+  console.log(req.body);
+
+  Employee.findByIdAndUpdate(employeeId, update, (err, employeeUpdated) => {
+    if (err) {
+      res.status(500).send({message: 'Error al actualizar empleado'});
 
     } else {
-      var employeeId = req.params.id;
-      var adminId = req.params.admin;
-      var update = req.body;
-
-      Employee.findByIdAndUpdate(employeeId, update, (err, employeeUpdated) => {
-        if (err) {
-          res.status(500).send({message: 'Error al actualizar empleado'});
-
-        } else {
-          if (!employeeUpdated) {
-            res.status(404).send({message: 'No se ha podido actualizar al empleado'});
-          } else {
-
-            var u_employee = new UEmployee();
-            u_employee.date = new Date();
-            u_employee.before = employeeUpdated;
-            u_employee.employee = employeeUpdated._id;
-            u_employee.mannager = adminId;
-
-
-            Employee.findOne({_id: employeeId}, (err, upEmployee) => {
-              if (err) {
-                res.status(500).send({message: 'ERROR EN LA PETICION'});
-
-              } else {
-                if (!upEmployee) {
-                  res.status(404).send({message: 'EL EMPLEADO NO EXISTE'});
-
-                } else {
-                  u_employee.after = upEmployee;
-
-                  //Guarar registro de cliente borrado en BD
-                  u_employee.save((err, uemployeeStored) => {
-                    if (err) {
-                      res.status(500).send({message: 'ERROR AL GUARDAR REGISTRO DE CLIENTE ACTUALIZADO'});
-
-                    } else {
-                      if (!uemployeeStored) {
-                        res.status(404).send({message: 'NO SE HA REGISTRADO LA ACTUALIZACION DEL CLIENTE'});
-
-                      } else {
-                        //RETURN UPDATED EMPLOYEE
-                        res.status(200).send({upEmployee});
-                      }
-                    }
-                  });
-                }
-              }
-            });
-          }
-        }
-      });
+      if (!employeeUpdated) {
+        res.status(404).send({message: 'No se ha podido actualizar al empleado'});
+      } else {
+        res.status(200).send(employeeUpdated);
+      }
     }
-  }
-
+  });
 }
 
 
@@ -390,72 +250,29 @@ IMPLEMENTED WITH delete
 
 in header send the next params
   Authorization: token (this is mandatory)
-  role: ROLE_ADMIN (this is mandatory)
 
 in the request parameters send the next atributes in the express url
   id: id_of_employee_to_deactivate (this is mandatory)
-  admin: id_of_admin (this is mandatory)
 */
 employeeController.deleteEmployee = (req,res) => {
 
-  if (!req.headers.role) {
-    res.status(500).send({message: 'ERROR EN LA PETICION'});
+  console.log('DELETE EMPLOYEE REQ');
+  var employeeId = req.params.id;
+  var update = {status: 'INACTIVE_EMPLOYEE'};
 
-  } else {
-    if (req.headers.role != 'ROLE_ADMIN') {
-      res.status(500).send({message: 'ERROR EN LA PETICION'});
+  Employee.findByIdAndUpdate(employeeId, update, (err, employeeIdUpdated) => {
+    if (err) {
+      res.status(500).send({message: 'Error al eliminar empleado'});
 
     } else {
-      var employeeId = req.params.id;
-      var update = {status: 'INACTIVE_EMPLOYEE'};
+      if (!employeeIdUpdated) {
+        res.status(404).send({message: 'No se ha podido eliminar al cliente'});
 
-      Employee.findByIdAndUpdate(employeeId, update, (err, employeeIdUpdated) => {
-        if (err) {
-          res.status(500).send({message: 'Error al eliminar empleado'});
-
-        } else {
-          if (!employeeIdUpdated) {
-            res.status(404).send({message: 'No se ha podido eliminar al cliente'});
-
-          } else {
-            var d_employee = new DEmployee();
-            d_employee.date = new Date();
-            d_employee.employee = employeeId;
-            d_employee.mannager = req.params.admin;
-
-            Employee.findOne({_id: employeeId}, (err, delEmployee) => {
-              if (err) {
-                res.status(500).send({message: 'ERROR EN LA PETICION'});
-
-              } else {
-                if (!delEmployee) {
-                  res.status(404).send({message: 'EL EMPLEADO NO EXISTE'});
-
-                } else {
-                  d_employee.client = delEmployee;
-
-                  //Guarar registro de empleado eliminado en BD
-                  d_employee.save((err, demployeeStored) => {
-                    if (err) {
-                      res.status(500).send({message: 'ERROR AL GUARDAR REGISTRO DE EMPLEADO INACTIVO'});
-
-                    } else {
-                      if (!demployeeStored) {
-                        res.status(404).send({message: 'NO SE HA REGISTRADO DEL EMPLEADO INACTIVO'});
-
-                      } else {
-                        res.status(200).send({delEmployee});
-                      }
-                    }
-                  });
-                }
-              }
-            });
-          }
-        }
-      });
+      } else {
+        res.send({employeeIdUpdated});
+      }
     }
-  }
+  });
 }
 
 
@@ -657,20 +474,37 @@ employeeController.createAdmin = (req, res) => {
   employee.image = 'null';
   employee.status = 'ACTIVE_ADMIN';
 
-  bcrypt.hash(params.password, null, null, function(err, hash){
-    employee.password = hash;
-    employee.save((err, adminStored) => {
-      if (err) {
-        res.status(500).send({message: 'ERROR AL GUARDAR EMPLEADO'});
-      }  else {
-        if (!adminStored) {
-          res.status(404).send({message: 'NO SE HA REGISTRADO AL EMPLEADO'});
-        } else {
-          res.status(200).send({admin: adminStored});
+  if (!params.password) {
+    bcrypt.hash("password1", null, null, function(err, hash){
+      employee.password = hash;
+      employee.save((err, adminStored) => {
+        if (err) {
+          res.status(500).send({message: 'ERROR AL GUARDAR EMPLEADO'});
+        }  else {
+          if (!adminStored) {
+            res.status(404).send({message: 'NO SE HA REGISTRADO AL EMPLEADO'});
+          } else {
+            res.status(200).send({admin: adminStored});
+          }
         }
-      }
+      });
     });
-  });
+  } else {
+    bcrypt.hash(params.password, null, null, function(err, hash){
+      employee.password = hash;
+      employee.save((err, adminStored) => {
+        if (err) {
+          res.status(500).send({message: 'ERROR AL GUARDAR EMPLEADO'});
+        }  else {
+          if (!adminStored) {
+            res.status(404).send({message: 'NO SE HA REGISTRADO AL EMPLEADO'});
+          } else {
+            res.status(200).send({admin: adminStored});
+          }
+        }
+      });
+    });
+  }
 }
 
 

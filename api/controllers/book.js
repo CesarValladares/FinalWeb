@@ -28,72 +28,40 @@ in the request parameters send the next atributes in the express url
 */
 bookController.createBook = (req, res) => {
 
-  if (!req.headers.role) {
-    res.status(500).send({message: 'ERROR EN LA PETICION_'});
+  var book = new Book();
+  var employeeId = req.params.admin;
+
+  var params = req.body;
+  book.title = params.title;
+  book.description = params.description;
+  book.genre = params.genre;
+  book.year = params.year;
+  book.pages = params.pages;
+  book.editorial = params.editorial;
+  book.total = params.total;
+  book.onloan = 0;
+  book.inhouse = params.total;
+  book.type = params.type;
+  book.author = params.author;
+  book.status = 'ACTIVE';
+  book.image = '';
+  book.file = '';
+
+  if (!book.title || !book.description || !book.genre || !book.year || !book.pages || !book.editorial || !book.total || !book.author) {
+    res.send({message: 'LLENE TODOS LOS CAMPOS'});
 
   } else {
-    if (req.headers.role != 'ROLE_ADMIN' && req.headers.role != 'ROLE_EMPLOYEE') {
-      res.status(500).send({message: 'ERROR EN LA PETICION___'});
-
-    } else {
-
-      var book = new Book();
-      var authorId = req.params.author;
-      var employeeId = req.params.admin;
-
-      var params = req.body;
-      book.title = params.title;
-      book.description = params.description;
-      book.genre = params.genre;
-      book.year = params.year;
-      book.pages = params.pages;
-      book.editorial = params.editorial;
-      book.total = params.total;
-      book.onloan = 0;
-      book.inhouse = params.total;
-      book.type = params.type;
-      book.author = authorId;
-      book.status = 'ACTIVE';
-      book.image = '';
-      book.file = '';
-
-      if (!book.title || !book.description || !book.genre || !book.year || !book.pages || !book.editorial || !book.total) {
-        res.status(501).send({message: 'LLENE TODOS LOS CAMPOS'});
-
+    book.save((err, bookStored) => {
+      if (err) {
+        res.status(500).send({message: 'ERROR AL GUARDAR LIBRO'});
       } else {
-
-        book.save((err, bookStored) => {
-          if (err) {
-            res.status(500).send({message: 'ERROR AL GUARDAR LIBRO'});
-          } else {
-            if (!bookStored) {
-              res.status(404).send({message: 'EL LIBRO NO HA SIDO GUARDADO'});
-            } else {
-              var c_book = new CBook();
-              c_book.date = new Date();
-              c_book.employee = employeeId;
-              c_book.book = bookStored._id;
-
-              //Guarar registro de autor creado en BD
-              c_book.save((err, cbookStored) => {
-                if (err) {
-                  res.status(500).send({message: 'ERROR AL GUARDAR REGISTRO LIBRO CREADO'});
-
-                } else {
-                  if (!cbookStored) {
-                    res.status(404).send({message: 'NO SE HA REGISTRADO LA CREACION DEL LIBRO'});
-
-                  } else {
-                    res.status(200).send({book: bookStored});
-                  }
-                }
-              });
-            }
-          }
-        });
-
+        if (!bookStored) {
+          res.status(404).send({message: 'EL LIBRO NO HA SIDO GUARDADO'});
+        } else {
+          res.send({book: bookStored});
+        }
       }
-    }
+    });
   }
 }
 
@@ -157,7 +125,7 @@ bookController.readBooks = (req, res) => {
       if (!books) {
         res.status(404).send({message: 'NO HAY LIBROS'});
       } else {
-        res.status(200).send({books});
+        res.json(books);
       }
     }
   });

@@ -34,21 +34,30 @@ export class EmployeeService {
   }
 
   getEmployees() {
-    console.log('Conectar a BD --------');
-    return this.http.get(this.URL_API + 'employees');
-    //return this.http.get(this.URL_API + 'employee/5bfae3fd2772781e5b0b2c72');
+    let headers = new HttpHeaders({'Authorization': this.getToken(),
+                                   'Content-Type': 'application/json'});
+    return this.http.get(this.URL_API + 'employees',{headers: headers});
   }
 
+  /*LLAMAR ULR PARA CREAR USUARIO*/
   postEmployee(employee: Employee) {
-    return this.http.post(this.URL_API, employee);
+    let headers = new HttpHeaders({'Authorization': this.getToken(),
+                                   'Content-Type': 'application/json'});
+    return this.http.post(this.URL_API + 'employee', employee, {headers: headers});
   }
 
+  /*UPDATE AN EMPLOYEE*/
   putEmployee(employee: Employee) {
-    return this.http.put(this.URL_API + `/${employee._id}`, employee);
+    let headers = new HttpHeaders({'Authorization': this.getToken(),
+                                   'Content-Type': 'application/json'});
+    return this.http.put(this.URL_API + 'employee/' + `${employee._id}`, employee, {headers: headers});
   }
 
   deleteEmployee (_id: string) {
-    return this.http.delete(this.URL_API + `/${_id}`);
+    console.log('ID::' + _id);
+    let headers = new HttpHeaders({'Authorization': this.getToken(),
+                                   'Content-Type': 'application/json'});
+    return this.http.delete(this.URL_API + 'employee/' + `${_id}`, {headers: headers});
   }
 
   getIdentity(){

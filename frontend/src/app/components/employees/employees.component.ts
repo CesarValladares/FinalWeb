@@ -21,18 +21,23 @@ export class EmployeesComponent implements OnInit {
 
   addEmployee(form: NgForm) {
     if(form.value._id){
+      console.log('UPDATE');
       this.employeeService.putEmployee(form.value)
         .subscribe(res => {
+          console.log('UPDATE2');
           this.resetForm(form);
           M.toast({html: 'Updated Successfully'});
           this.getEmployees();
         });
     }else{
+      console.log('CREATE');
       this.employeeService.postEmployee(form.value)
       .subscribe(res => {
         this.resetForm(form);
         M.toast({html: 'Save Successfully'});
         this.getEmployees();
+      }, err => {
+        alert("El empleado no está correctamente creado");
       });
     }
   }

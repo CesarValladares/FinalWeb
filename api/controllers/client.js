@@ -284,37 +284,21 @@ in the request parameters send the next atributes in the express url
   page: number of the page (this is not mandatory)
 */
 clientController.readClients = (req, res) => {
+  console.log('CLIENTS REQ');
 
-  if (!req.headers.role) {
-    res.status(500).send({message: 'ERROR EN LA PETICION_'});
-
-  } else {
-    if (req.headers.role != 'ROLE_ADMIN') {
+  Client.find({status: 'ACTIVE'}).sort('name').paginate(page, itemsPerPage, (err, clients, total) => {
+    if (err) {
       res.status(500).send({message: 'ERROR EN LA PETICION'});
-
-    } else {
-      if (req.params.page) {
-        var page = req.params.page;
-      } else {
-        var page = 1;
-      }
-      var itemsPerPage = 10;
-
-      Client.find({status: 'ACTIVE'}).sort('name').paginate(page, itemsPerPage, (err, clients, total) => {
-        if (err) {
-          res.status(500).send({message: 'ERROR EN LA PETICION'});
-        }
-        else {
-          if (clients) {
-            res.json(clients);
-          }
-          else {
-            res.status(404).send({message: 'NO HAY CLIENTES'});
-          }
-        }
-      });
     }
-  }
+    else {
+      if (clients) {
+        res.json(clients);
+      }
+      else {
+        res.status(404).send({message: 'NO HAY CLIENTES'});
+      }
+    }
+  });
 }
 
 
