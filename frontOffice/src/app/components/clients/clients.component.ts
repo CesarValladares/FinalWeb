@@ -14,40 +14,35 @@ declare var M: any;
 })
 export class ClientsComponent implements OnInit {
 
-  constructor(private clientService: ClientService) {}
+  constructor(public clientService: ClientService) {}
 
   ngOnInit() {
-    this.getClients();
+
   }
 
 
   addClient(form: NgForm) {
     if (form.value._id) {
+      console.log('UPDATE');
       this.clientService.putClient(form.value)
       .subscribe( res => {
+        console.log('UPDATE2');
         this.resetForm(form);
-        M.toast({html: 'Updated successfully'});
-        this.getClients();
+
       });
     } else {
+      console.log('CREATE');
       this.clientService.postClient(form.value)
       .subscribe( res => {
         this.resetForm(form);
-        M.toast({html: 'Save Successfully'});
-        this.getClients();
+
+      }, err => {
+        alert('El cliente no esta creado correctamente');
       });
     }
   }
 
-  getClients() {
-    this.clientService.getClients()
-    .subscribe( res => {
-      this.clientService.clients = res as Client[];
-      console.log(res);
-    }, error => {
-      console.log(error);
-    });
-  }
+
 
   editClient(client: Client) {
     this.clientService.selectedClient = client;
@@ -58,7 +53,7 @@ export class ClientsComponent implements OnInit {
       this.clientService.deleteClient(_id)
       .subscribe( res => {
         M.toast({html: 'Client deleted'});
-        this.getClients();
+
       });
     }
   }
