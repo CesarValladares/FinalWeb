@@ -15,6 +15,12 @@ var clientController = {};
 var express = require('express');
 var app = express();
 
+app.use(express.static('FrontOfficeFront'));
+
+app.get('/', function(req, res){
+    res.sendfile('FrontOfficeFront/login.html');
+});
+
 //CREATE A NEW CLIENT
 /*
 Function used to create a client.
@@ -29,7 +35,7 @@ in the request parameters send the next atributes in the express url
 */
 clientController.createClient = (req, res) => {
 
-  if (req.params.employee) {    
+  if (req.params.employee) {
     if (!req.headers.role) {
       res.status(500).send({message: 'ERROR EN LA PETICION'});
 
