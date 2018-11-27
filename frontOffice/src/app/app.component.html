@@ -1,4 +1,27 @@
+<div *ngIf="!identity">
+  <div class= "login-box-iniciar">
+    <h1>Iniciar Sesión</h1>
+    <form #clientForm="ngForm" (ngSubmit)="onSubmit()">
+      <div class="textbox">
 
-<div>
-  <app-clients></app-clients>
+        <input type="email" placeholder="Email" name="email" #name="ngModel" [(ngModel)]="client.email">
+
+      </div>
+      <div class="textbox">
+
+        <input type="password" placeholder="Password" name="password" #name="ngModel" [(ngModel)]="client.password">
+
+      </div>
+
+      <input type="submit" class="btn btn btn-success" value = "Iniciar sesión">
+    </form>
+
+  </div>
+
+
+
+  <div>
+    <app-clients></app-clients>
+  </div>
+
 </div>

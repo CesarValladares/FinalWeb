@@ -22,20 +22,16 @@ export class ClientService {
   }
 
   signup(user_to_login, gethash = null) {
-
+    console.log('1');
     if (gethash != null) {
       user_to_login.gethash = gethash;
     }
     const json = JSON.stringify(user_to_login);
     const params = json;
+    console.log('parametros');
     console.log(params);
     const headers = new HttpHeaders({'Content-Type': 'application/json'});
     return this.http.post(this.URL_API + 'client-login', params, {headers: headers});
-  }
-
-  getClients() {
-    const headers = new HttpHeaders({'Authorization': this.getToken(), 'Content-Type': 'application/json'});
-    return this.http.get(this.URL_API + 'clients', {headers: headers});
   }
 
   postClient(client: Client) {

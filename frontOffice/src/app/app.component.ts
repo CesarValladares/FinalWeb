@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
   public alertRegister;
 
   constructor (
-    private clientService: ClientService
+    public clientService: ClientService
   ) {
     this.client = new Client('', '', '', '', '', '' , '', 'ROLE_CLIENT', '');
     this.client_register = new Client('', '', '', '', '', '' , '', 'ROLE_CLIENT', '');
@@ -33,7 +33,7 @@ export class AppComponent implements OnInit {
     this.token = this.clientService.getToken();
   }
 
-  /*public onSubmit() {
+  public onSubmit() {
     this.clientService.signup(this.client)
     .subscribe( res => {
       const myJSON = JSON.stringify(res);
@@ -64,9 +64,10 @@ export class AppComponent implements OnInit {
               this.client = new Client('', '', '', '', '', '', '', 'ROLE_CLIENT', '');
               console.log(this.clientService.getIdentity());
               console.log(this.clientService.getToken());
-            }
+              console.log('Se inicio correctamente');            }
           },
           error => {
+            console.log('ERROOOOOOOOR');
             const errorMessage = <any>error;
 
             if (errorMessage != null) {
@@ -86,5 +87,5 @@ export class AppComponent implements OnInit {
     localStorage.clear();
     this.identity = null;
     this.token = null;
-  }*/
+  }
 }
