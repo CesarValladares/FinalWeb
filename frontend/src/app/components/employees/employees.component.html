@@ -10,13 +10,25 @@
                   <input type="text" name="name" #name="ngModel" [(ngModel)]="employeeService.selectedEmployee.name" placeholder="Enter your name">
                 </div>
                 <div class="input-field col s12">
-                    <input type="text" name="position" #position="ngModel" [(ngModel)]="employeeService.selectedEmployee.surname" placeholder="Enter your position">
+                    <input type="text" name="surname" #surname="ngModel" [(ngModel)]="employeeService.selectedEmployee.surname" placeholder="Enter your surname">
                 </div>
                 <div class="input-field col s12">
-                    <input type="text" name="office" #office="ngModel" [(ngModel)]="employeeService.selectedEmployee.email" placeholder="Enter your office">
+                    <input type="email" name="email" #email="ngModel" [(ngModel)]="employeeService.selectedEmployee.email" placeholder="Enter your email">
                 </div>
                 <div class="input-field col s12">
-                    <input type="text" name="salary" #salary="ngModel" [(ngModel)]="employeeService.selectedEmployee.username" placeholder="Enter your salary">
+                    <input type="text" name="username" #username="ngModel" [(ngModel)]="employeeService.selectedEmployee.username" placeholder="Enter your username">
+                </div>
+                <div class="input-field col s12">
+                    <input type="text" name="password" #password="ngModel" [(ngModel)]="employeeService.selectedEmployee.password" placeholder="Enter your password">
+                </div>
+                <div class="input-field col s12">
+                    <input type="text" name="image" #image="ngModel" [(ngModel)]="employeeService.selectedEmployee.image" placeholder="Enter your image">
+                </div>
+                <div class="input-field col s12">
+                    <input type="text" name="role" #role="ngModel" [(ngModel)]="employeeService.selectedEmployee.role" placeholder="Enter your role">
+                </div>
+                <div class="input-field col s12">
+                    <input type="text" name="status" #status="ngModel" [(ngModel)]="employeeService.selectedEmployee.status" placeholder="Enter your status">
                 </div>
 
                 <div class="card-action">
