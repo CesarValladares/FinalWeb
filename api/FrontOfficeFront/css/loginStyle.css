@@ -88,9 +88,31 @@ body{
     margin-top: 10px;
 }
 
+#logoBox {
+  position: absolute;
+  height: 100px;
+  width: 100px;
+  top: 20px;
+  left: 20px;
+  background-color: #333;
+}
+
+#logoBox img {
+  width: 100%;
+  height: 100%;
+}   
+
 @media only screen and (max-width: 600px) {
     .textbox input {
         width: 70%;
         margin-left: 15%;
+    }
+
+    #logoBox {
+      position: absolute;
+      height: 80px;
+      width: 80px;
+      top: 20px;
+      left: 20px;
     }
 }
