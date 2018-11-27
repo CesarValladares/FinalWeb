@@ -5,38 +5,45 @@
     <div class="textbox">
 
       <input type="text" placeholder="Name" name ="name" #name="ngModel" [(ngModel)]="clientService.selectedClient.name">
+
     </div>
     <div class="textbox">
 
       <input type="text" placeholder="Surname" name="surname" #name="ngModel" [(ngModel)]="clientService.selectedClient.surname" >
+
     </div>
     <div class="textbox">
 
       <input type="email" placeholder="Email" name="email" #name="ngModel" [(ngModel)]="clientService.selectedClient.email">
+
     </div>
     <div class="textbox">
 
       <input type="text" placeholder="Username" name="username" #name="ngModel" [(ngModel)]="clientService.selectedClient.username">
+
     </div>
     <div class="textbox">
 
       <input type="password" placeholder="Password" name="password" #name="ngModel" [(ngModel)]="clientService.selectedClient.password">
+
     </div>
     <div class="textbox">
 
       <input type="text" placeholder="Image" name="image" #name="ngModel" [(ngModel)]="clientService.selectedClient.image">
+
     </div>
     <div class="textbox">
 
       <input type="text" placeholder="Role" name="role" #name="ngModel" [(ngModel)]="clientService.selectedClient.role">
+
     </div>
     <div class="textbox">
 
       <input type="text" placeholder="Balance" name="balance" #name="ngModel" [(ngModel)]="clientService.selectedClient.balance">
+
     </div>
 
-    <button  class="button" type="button" value="Iniciar sesión" >Iniciar sesión</button>
-    <button  class="button" type="button" value="Registrarse" (click)="resetForm(clientForm)">Registrarse</button>
+    <input type="submit" class="btn btn btn-success" value = "Registrarse">
   </form>
 
 </div>

@@ -34,19 +34,23 @@ export class ClientService {
   }
 
   getClients() {
-    return this.http.get(this.URL_API + 'clients');
+    const headers = new HttpHeaders({'Authorization': this.getToken(), 'Content-Type': 'application/json'});
+    return this.http.get(this.URL_API + 'clients', {headers: headers});
   }
 
   postClient(client: Client) {
-    return this.http.post(this.URL_API, client);
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+    return this.http.post(this.URL_API + 'client', client, {headers: headers});
   }
 
   putClient(client: Client) {
-    return this.http.put(this.URL_API + `/${client._id}`, client);
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+    return this.http.put(this.URL_API + `/${client._id}`, client, {headers: headers});
   }
 
   deleteClient (_id: string) {
-    return this.http.delete(this.URL_API + `/${_id}`);
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+    return this.http.delete(this.URL_API + `client/${_id}`, {headers: headers});
   }
 
   getIdentity() {

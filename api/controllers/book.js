@@ -20,11 +20,18 @@ This function returns the created book (as a JSON OBJECT)
 IMPLEMENTED WITH post
 in header send the next params
   Autorization: token_of_the_admin
-  role: ROLE_ADMIN or ROLE_USER (It is stored in the client or employee atributes as role: )
 
 in the request parameters send the next atributes in the express url
-  author: id_of_the_author (this is mandatory)
-  admin: id_of_the_admin (this is mandatory)
+NONE
+
+in the request body send the next parameters
+  title: string
+  description: string
+  genre: string
+  year: number
+  pages: number
+  editorial: string
+  total: number
 */
 bookController.createBook = (req, res) => {
 
@@ -58,7 +65,7 @@ bookController.createBook = (req, res) => {
         if (!bookStored) {
           res.status(404).send({message: 'EL LIBRO NO HA SIDO GUARDADO'});
         } else {
-          res.send({book: bookStored});
+          res.send(bookStored);
         }
       }
     });
@@ -89,7 +96,7 @@ bookController.readBook = (req, res) => {
       if (!book) {
         res.status(404).send({message: 'EL LIBRO NO EXISTE'});
       } else {
-        res.status(200).send({book: book});
+        res.status(200).send(book);
       }
     }
   });
@@ -139,75 +146,41 @@ IMPLEMENTED WITH put
 
 in header send the next params
   Authorization: token (this is mandatory)
-  role: ROLE_ADMIN (this is mandatory)
 
 in the request parameters send the next atributes in the express url
   id: id_of_book_to_update (this is mandatory)
-  admin: id_of_admin (this is mandatory)
+
+in the reques body send the parameters that will be updated
 */
 bookController.updateBook = (req, res) => {
 
-  if (!req.headers.role) {
-    res.status(500).send({message: 'ERROR EN LA PETICION_'});
+  var bookId = req.params.id;
+  var update = req.body;
 
-  } else {
-    if (req.headers.role != 'ROLE_ADMIN' && req.headers.role != 'ROLE_EMPLOYEE') {
-      res.status(500).send({message: 'ERROR EN LA PETICION'});
-
+  Book.findByIdAndUpdate(bookId, update, (err, bookUpdated) => {
+    if (err) {
+      res.status(500).send({message: 'ERROR AL ACTUALIZAR LIBRO'});
     } else {
-      var bookId = req.params.id;
-      var employeeId =req.params.admin;
-      var update = req.body;
+      if (!bookUpdated) {
+        res.status(404).send({message: 'EL LIBRO NO HA SIDO ACTUALIZADO'});
+      } else {
 
-      Book.findByIdAndUpdate(bookId, update, (err, bookUpdated) => {
-        if (err) {
-          res.status(500).send({message: 'ERROR AL ACTUALIZAR LIBRO'});
-        } else {
-          if (!bookUpdated) {
-            res.status(404).send({message: 'EL LIBRO NO HA SIDO ACTUALIZADO'});
+        Book.findOne({_id: bookId}, (err, upBook) => {
+          if (err) {
+            res.status(500).send({message: 'ERROR EN LA PETICION'});
+
           } else {
+            if (!upBook) {
+              res.status(404).send({message: 'EL LIBRO NO EXISTE'});
 
-            var u_book = new UBook();
-            u_book.date = new Date();
-            u_book.before = bookUpdated;
-            u_book.employee = employeeId;
-            u_book.book = bookUpdated._id;
-
-
-            Book.findOne({_id: bookId}, (err, upBook) => {
-              if (err) {
-                res.status(500).send({message: 'ERROR EN LA PETICION'});
-
-              } else {
-                if (!upBook) {
-                  res.status(404).send({message: 'EL LIBRO NO EXISTE'});
-
-                } else {
-                  u_book.after = upBook;
-
-                  //Guarar registro de LIBRO ACTUALIZADO en BD
-                  u_book.save((err, ubookStored) => {
-                    if (err) {
-                      res.status(500).send({message: 'ERROR AL GUARDAR REGISTRO DE LIBRO ACTUALIZADO'});
-
-                    } else {
-                      if (!ubookStored) {
-                        res.status(404).send({message: 'NO SE HA REGISTRADO LA ACTUALIZACION DEL LIBRO'});
-
-                      } else {
-                        //RETURN UPDATED EMPLOYEE
-                        res.status(200).send({upBook});
-                      }
-                    }
-                  });
-                }
-              }
-            });
+            } else {
+              res.status(200).send(upBook);
+            }
           }
-        }
-      });
+        });
+      }
     }
-  }
+  });
 }
 
 
@@ -220,71 +193,40 @@ IMPLEMENTED WITH delete
 
 in header send the next params
   Authorization: token (this is mandatory)
-  role: ROLE_ADMIN (this is mandatory)
 
 in the request parameters send the next atributes in the express url
-  id: id_of_author_to_deactivate (this is mandatory)
-  admin: id_of_admin (this is mandatory)
+  id: id_of_book_to_deactivate (this is mandatory)
 */
 bookController.deleteBook = (req,res) => {
+  var bookId = req.params.id;
+  var update = {status: 'INACTIVE'};
 
-  if (!req.headers.role) {
-    res.status(500).send({message: 'ERROR EN LA PETICION'});
-
-  } else {
-    if (req.headers.role != 'ROLE_ADMIN') {
-      res.status(500).send({message: 'ERROR EN LA PETICION'});
+  Book.findByIdAndUpdate(bookId, update, (err, bookUpdated) => {
+    if (err) {
+      res.status(500).send({message: 'Error al eliminar libro'});
 
     } else {
-      var bookId = req.params.id;
-      var update = {status: 'INACTIVE'};
+      if (!bookUpdated) {
+        res.status(404).send({message: 'No se ha podido eliminar al cliente'});
 
-      Book.findByIdAndUpdate(bookId, update, (err, bookUpdated) => {
-        if (err) {
-          res.status(500).send({message: 'Error al eliminar libro'});
+      } else {
 
-        } else {
-          if (!bookUpdated) {
-            res.status(404).send({message: 'No se ha podido eliminar al cliente'});
+        Book.findOne({_id: bookId}, (err, delBook) => {
+          if (err) {
+            res.status(500).send({message: 'ERROR EN LA PETICION'});
 
           } else {
-            var d_book = new DBook();
-            d_book.date = new Date();
-            d_book.employee = req.params.admin;
+            if (!delBook) {
+              res.status(404).send({message: 'EL LIBRO NO EXISTE'});
 
-            Book.findOne({_id: bookId}, (err, delBook) => {
-              if (err) {
-                res.status(500).send({message: 'ERROR EN LA PETICION'});
-
-              } else {
-                if (!delBook) {
-                  res.status(404).send({message: 'EL LIBRO NO EXISTE'});
-
-                } else {
-                  d_book.book = delBook._id;
-
-                  //Guarar registro de empleado eliminado en BD
-                  d_book.save((err, dbokStored) => {
-                    if (err) {
-                      res.status(500).send({message: 'ERROR AL GUARDAR REGISTRO DE LIBRO INACTIVO'});
-
-                    } else {
-                      if (!dbokStored) {
-                        res.status(404).send({message: 'NO SE HA REGISTRADO DEL LIBRO INACTIVO'});
-
-                      } else {
-                        res.status(200).send({delBook});
-                      }
-                    }
-                  });
-                }
-              }
-            });
+            } else {
+              res.status(200).send(delBook);
+            }
           }
-        }
-      });
+        });
+      }
     }
-  }
+  });
 }
 
 
@@ -296,54 +238,44 @@ IMPLEMENTED WITH post
 
 in header send the next params
   Authorization: token (this is mandatory)
-  role: ROLE_ADMIN or ROLE_EMPLOYEE (this is mandatory) -> Just ADMIN and EMPLOYEE CAN UPDATE AUTHORS IMAGE
 
 in the request parameters send the next atributes in the express url
   id: id_of_book (this is mandatory)
+
+in the body send the image in format ... (investigar)
 */
 bookController.uploadImage = (req, res) => {
+  var bookId = req.params.id;
+  var file_name = 'null';
 
-  if (!req.headers.role) {
-    res.status(500).send({message: 'ERROR EN LA PETICION'});
+  if (req.files) {
+    var file_path = req.files.image.path;
+    var file_split = file_path.split('/');
+    var file_name = file_split[3];
+    var ext_split = file_path.split('.');
+    var file_ext = ext_split[1];
 
-  } else {
-    if (req.headers.role != 'ROLE_ADMIN' && req.headers.role != 'ROLE_EMPLOYEE') {
-      res.status(500).send({message: 'ERROR EN LA PETICION'});
-
-    } else {
-      var bookId = req.params.id;
-      var file_name = 'null';
-
-      if (req.files) {
-        var file_path = req.files.image.path;
-        var file_split = file_path.split('/');
-        var file_name = file_split[3];
-        var ext_split = file_path.split('.');
-        var file_ext = ext_split[1];
-
-        if (file_ext == 'png' || file_ext == 'jpg' || file_ext == 'gif') {
-          Book.findByIdAndUpdate(bookId, {image: file_name}, (err, bookUpdated) => {
-            if (err) {
-              res.status(500).send({message: 'Error al actualizar imagen del libro'});
-
-            } else {
-              if (!bookUpdated) {
-                res.status(404).send({message: 'No se ha podido actualizar la imagen del libro'});
-
-              } else {
-                res.status(200).send({image: file_name, book: bookUpdated});
-              }
-            }
-          });
+    if (file_ext == 'png' || file_ext == 'jpg' || file_ext == 'gif') {
+      Book.findByIdAndUpdate(bookId, {image: file_name}, (err, bookUpdated) => {
+        if (err) {
+          res.status(500).send({message: 'Error al actualizar imagen del libro'});
 
         } else {
-          res.status(200).send({message: 'Extensión no valida'});
-        }
+          if (!bookUpdated) {
+            res.status(404).send({message: 'No se ha podido actualizar la imagen del libro'});
 
-      } else {
-        res.status(200).send({message: 'No se ha subido ninguna imagen'});
-      }
+          } else {
+            res.status(200).send({image: file_name, book: bookUpdated});
+          }
+        }
+      });
+
+    } else {
+      res.status(200).send({message: 'Extensión no valida'});
     }
+
+  } else {
+    res.status(200).send({message: 'No se ha subido ninguna imagen'});
   }
 }
 
@@ -383,54 +315,43 @@ IMPLEMENTED WITH post
 
 in header send the next params
   Authorization: token (this is mandatory)
-  role: ROLE_ADMIN or ROLE_EMPLOYEE (this is mandatory) -> Just ADMIN and EMPLOYEE CAN UPDATE AUTHORS IMAGE
 
 in the request parameters send the next atributes in the express url
   id: id_of_book (this is mandatory)
 */
 bookController.uploadBookFile = (req, res) => {
 
-  if (!req.headers.role) {
-    res.status(500).send({message: 'ERROR EN LA PETICION'});
+  var bookId = req.params.id;
+  var file_name = 'null';
 
-  } else {
-    if (req.headers.role != 'ROLE_ADMIN' && req.headers.role != 'ROLE_EMPLOYEE') {
-      res.status(500).send({message: 'ERROR EN LA PETICION'});
+  if (req.files) {
+    var file_path = req.files.file.path;
+    var file_split = file_path.split('/');
+    var file_name = file_split[3];
+    var ext_split = file_path.split('.');
+    var file_ext = ext_split[1];
 
-    } else {
-      var bookId = req.params.id;
-      var file_name = 'null';
-
-      if (req.files) {
-        var file_path = req.files.file.path;
-        var file_split = file_path.split('/');
-        var file_name = file_split[3];
-        var ext_split = file_path.split('.');
-        var file_ext = ext_split[1];
-
-        if (file_ext == 'pdf' || file_ext == 'mp3') {
-          Book.findByIdAndUpdate(bookId, {file: file_name}, (err, bookUpdated) => {
-            if (err) {
-              res.status(500).send({message: 'Error al actualizar LIBRO'});
-
-            } else {
-              if (!bookUpdated) {
-                res.status(404).send({message: 'No se ha podido actualizar el libro'});
-
-              } else {
-                res.status(200).send({book: bookUpdated});
-              }
-            }
-          });
+    if (file_ext == 'pdf' || file_ext == 'mp3') {
+      Book.findByIdAndUpdate(bookId, {file: file_name}, (err, bookUpdated) => {
+        if (err) {
+          res.status(500).send({message: 'Error al actualizar LIBRO'});
 
         } else {
-          res.status(200).send({message: 'Extensión no valida'});
-        }
+          if (!bookUpdated) {
+            res.status(404).send({message: 'No se ha podido actualizar el libro'});
 
-      } else {
-        res.status(200).send({message: 'No se ha subido ningun file'});
-      }
+          } else {
+            res.status(200).send({book: bookUpdated});
+          }
+        }
+      });
+
+    } else {
+      res.status(200).send({message: 'Extensión no valida'});
     }
+
+  } else {
+    res.status(200).send({message: 'No se ha subido ningun file'});
   }
 }
 
@@ -458,6 +379,22 @@ bookController.getBookFile = (req, res) => {
     }
   });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*HASTA AQUÍ LLEGA*/
 
 //**********************  GET REGISTERS *************************
 //GET CREATED BOOK(S) REGISTERS

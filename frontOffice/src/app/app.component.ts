@@ -33,7 +33,7 @@ export class AppComponent implements OnInit {
     this.token = this.clientService.getToken();
   }
 
-  public onSubmit() {
+  /*public onSubmit() {
     this.clientService.signup(this.client)
     .subscribe( res => {
       const myJSON = JSON.stringify(res);
@@ -86,5 +86,5 @@ export class AppComponent implements OnInit {
     localStorage.clear();
     this.identity = null;
     this.token = null;
-  }
+  }*/
 }
