@@ -31,85 +31,17 @@ in header send the next params
   NO PARAMS IN HEADER
 
 in the request parameters send the next atributes in the express url
-  employee: id_of_the_employee_that_created_client (this is not mandatory)
+NONE
+
+send the next params in body
+  name:
+  surname:
+  email:
+  username:
+  password:
 */
 clientController.createClient = (req, res) => {
 
-  if (req.params.employee) {
-    if (!req.headers.role) {
-      res.status(500).send({message: 'ERROR EN LA PETICION'});
-
-    } else {
-      if (req.headers.role != 'ROLE_ADMIN') {
-        res.status(500).send({message: 'ERROR EN LA PETICION'});
-
-      } else {
-          var employeeId = req.params.employee;
-          var client = new Client();
-          var params = req.body;
-
-          client.name = params.name;
-          client.surname = params.surname;
-          client.email = params.email;
-          client.username = params.username;
-          client.role = 'ROLE_USER';
-          client.status = 'ACTIVE';
-          client.image = 'null';
-          client.balance = 0;
-
-
-          if (params.password) {
-            //Encriptar contraseña y guardar datos
-            bcrypt.hash(params.password, null, null, function(err, hash){
-              client.password = hash;
-              if (client.name != null && client.surname != null && client.email != null) {
-
-                //Guarar usuario en BD
-                client.save((err, clientStored) => {
-                  if (err) {
-                    res.status(500).send({message: 'ERROR AL GUARDAR CLIENTE'});
-                  }
-                  else {
-                    if (!clientStored) {
-                      res.status(404).send({message: 'NO SE HA REGISTRADO EL CLIENTE'});
-                    }
-                    else {
-                      var c_client = new CClient();
-                      c_client.date = new Date();
-                      c_client.client = clientStored._id;
-                      c_client.employee = employeeId;
-
-                      //Guarar registro de cliente borrado en BD
-                      c_client.save((err, cclientStored) => {
-                        if (err) {
-                          res.status(500).send({message: 'ERROR AL GUARDAR REGISTRO DE CLIENTE CREADO'});
-                        }
-                        else {
-                          if (!cclientStored) {
-                            res.status(404).send({message: 'NO SE HA REGISTRADO LA CREACION DE CLIENTE'});
-                          }
-                          else {
-                            res.status(200).send({client: clientStored});
-                          }
-                        }
-                      });
-                    }
-                  }
-                });
-              }
-              else {
-                res.status(200).send({message: 'Introduce todos los campos'});
-              }
-            });
-          }
-          else{
-            res.status(500).send({message: 'Introduce la contraseña'});
-          }
-      }
-    }
-  }
-  else {
-    var employeeId = null;
     var client = new Client();
     var params = req.body;
 
@@ -126,7 +58,6 @@ clientController.createClient = (req, res) => {
     if (params.password) {
       //Encriptar contraseña y guardar datos
       bcrypt.hash(params.password, null, null, function(err, hash){
-        client.password = hash;
         if (client.name != null && client.surname != null && client.email != null) {
 
           //Guarar usuario en BD
@@ -139,25 +70,7 @@ clientController.createClient = (req, res) => {
                 res.status(404).send({message: 'NO SE HA REGISTRADO EL CLIENTE'});
               }
               else {
-                var c_client = new CClient();
-                c_client.date = new Date();
-                c_client.client = clientStored._id;
-                c_client.employee = employeeId;
-
-                //Guarar registro de cliente borrado en BD
-                c_client.save((err, cclientStored) => {
-                  if (err) {
-                    res.status(500).send({message: 'ERROR AL GUARDAR REGISTRO DE CLIENTE CREADO'});
-                  }
-                  else {
-                    if (!cclientStored) {
-                      res.status(404).send({message: 'NO SE HA REGISTRADO LA CREACION DE CLIENTE'});
-                    }
-                    else {
-                      res.status(200).send({client: clientStored});
-                    }
-                  }
-                });
+                res.status(200).send(clientStored);
               }
             }
           });
@@ -170,7 +83,6 @@ clientController.createClient = (req, res) => {
     else{
       res.status(500).send({message: 'Introduce la contraseña'});
     }
-  }
 }
 
 
@@ -249,30 +161,19 @@ in the request parameters send the next atributes in the express url
   id: employee_id (this is mandatory)
 */
 clientController.readClient = (req, res) => {
+  var clientId = req.params.id;
 
-  if (!req.headers.role) {
-    res.status(500).send({message: 'ERROR EN LA PETICION_'});
-
-  } else {
-    if (req.headers.role != 'ROLE_ADMIN') {
+  Client.findById(clientId, (err, client) => {
+    if (err) {
       res.status(500).send({message: 'ERROR EN LA PETICION'});
-
     } else {
-      var clientId = req.params.id;
-
-      Client.findById(clientId, (err, client) => {
-        if (err) {
-          res.status(500).send({message: 'ERROR EN LA PETICION'});
-        } else {
-          if (!client) {
-            res.status(404).send({message: 'EL CLIENTE NO EXISTE'});
-          } else {
-            res.status(200).send({client: client});
-          }
-        }
-      });
+      if (!client) {
+        res.status(404).send({message: 'EL CLIENTE NO EXISTE'});
+      } else {
+        res.status(200).send(client);
+      }
     }
-  }
+  });
 }
 
 
@@ -287,7 +188,7 @@ in header send the next params
   role: ROLE_ADMIN (this is mandatory) just the admin can get the list of clients
 
 in the request parameters send the next atributes in the express url
-  page: number of the page (this is not mandatory)
+NONE
 */
 clientController.readClients = (req, res) => {
   console.log('CLIENTS REQ');
@@ -316,78 +217,40 @@ IMPLEMENTED WITH put
 
 in header send the next params
   Authorization: token (this is mandatory)
-  role: ROLE_ADMIN or ROLE_USER(this is mandatory)
 
 in the request parameters send the next atributes in the express url
   id: id_of_client_to_update (this is mandatory)
-  employee: id_of_admin (this is not mandatory)
 */
 clientController.updateClient = (req, res) => {
 
-  if (!req.headers.role) {
-    res.status(500).send({message: 'ERROR EN LA PETICION_'});
+  var update = req.body;
 
-  } else {
-    if (req.headers.role != 'ROLE_ADMIN' && req.headers.role != 'ROLE_USER') {
-      res.status(500).send({message: 'ERROR EN LA PETICION'});
+  Client.findByIdAndUpdate(clientId, update, (err, clientUpdated) => {
+    if (err) {
+      res.status(500).send({message: 'Error al actualizar cliente'});
+    }
+    else {
+      if (!clientUpdated) {
+        res.status(404).send({message: 'No se ha podido actualizar al cliente'});
+      }
+      else {
 
-    } else {
-      var clientId = req.params.id;
-      var update = req.body;
-
-      Client.findByIdAndUpdate(clientId, update, (err, clientUpdated) => {
-        if (err) {
-          res.status(500).send({message: 'Error al actualizar cliente'});
-        }
-        else {
-          if (!clientUpdated) {
-            res.status(404).send({message: 'No se ha podido actualizar al cliente'});
+        Client.findOne({_id: clientId}, (err, upClient) => {
+          if (err) {
+            res.status(500).send({message: 'ERROR EN LA PETICION'});
           }
           else {
-            var u_client = new UClient();
-            u_client.date = new Date();
-            u_client.before = clientUpdated;
-            u_client.client = clientId;
-            if (req.params.employee) {
-              u_client.employee = req.params.employee;
+            if (!upClient) {
+              res.status(404).send({message: 'EL CLIENTE NO EXISTE'});
             }
             else {
-              u_client.employee = null;
+              res.status(200).send(upClient);
             }
-
-            Client.findOne({_id: clientId}, (err, upClient) => {
-              if (err) {
-                res.status(500).send({message: 'ERROR EN LA PETICION'});
-              }
-              else {
-                if (!upClient) {
-                  res.status(404).send({message: 'EL CLIENTE NO EXISTE'});
-                }
-                else {
-                  u_client.after = upClient;
-
-                  //Guarar registro de cliente borrado en BD
-                  u_client.save((err, uclientStored) => {
-                    if (err) {
-                      res.status(500).send({message: 'ERROR AL GUARDAR REGISTRO DE CLIENTE ACTUALIZADO'});
-                    }
-                    else {
-                      if (!uclientStored) {
-                        res.status(404).send({message: 'NO SE HA REGISTRADO LA ACTUALIZACION DEL CLIENTE'});
-                      }
-                      else {
-                        res.status(200).send({upClient});
-                      }
-                    }
-                  });
-                }
-              }
-            });
           }
-        }
-      });
+        });
+      }
     }
-  }
+  });
 }
 
 
@@ -408,68 +271,36 @@ in the request parameters send the next atributes in the express url
 */
 clientController.deleteClient = (req,res) => {
 
-  if (!req.headers.role) {
-    res.status(500).send({message: 'ERROR EN LA PETICION_'});
+  var update = {status: 'INACTIVE'};
 
-  } else {
-    if (req.headers.role != 'ROLE_ADMIN') {
-      res.status(500).send({message: 'ERROR EN LA PETICION'});
+  Client.findByIdAndUpdate(clientId, update, (err, clientUpdated) => {
+    if (err) {
+      res.status(500).send({message: 'Error al actualizar cliente'});
+    }
+    else {
+      if (!clientUpdated) {
+        res.status(404).send({message: 'No se ha podido actualizar al cliente'});
+      }
+      else {
 
-    } else {
-      var clientId = req.params.id;
-      var update = {status: 'INACTIVE'};
-
-      Client.findByIdAndUpdate(clientId, update, (err, clientUpdated) => {
-        if (err) {
-          res.status(500).send({message: 'Error al actualizar cliente'});
-        }
-        else {
-          if (!clientUpdated) {
-            res.status(404).send({message: 'No se ha podido actualizar al cliente'});
+        Client.findOne({_id: clientId}, (err, upClient) => {
+          if (err) {
+            res.status(500).send({message: 'ERROR EN LA PETICION'});
           }
           else {
-            var d_client = new DClient();
-            d_client.date = new Date();
-            if (req.params.employee) {
-              d_client.employee = req.params.employee;
+            if (!upClient) {
+              res.status(404).send({message: 'EL CLIENTE NO EXISTE'});
             }
             else {
-              d_client.employee = null;
+              res.status(200).send(upClient);
             }
-
-            Client.findOne({_id: clientId}, (err, upClient) => {
-              if (err) {
-                res.status(500).send({message: 'ERROR EN LA PETICION'});
-              }
-              else {
-                if (!upClient) {
-                  res.status(404).send({message: 'EL CLIENTE NO EXISTE'});
-                }
-                else {
-                  d_client.client = upClient;
-
-                  //Guarar registro de cliente borrado en BD
-                  d_client.save((err, dclientStored) => {
-                    if (err) {
-                      res.status(500).send({message: 'ERROR AL GUARDAR REGISTRO DE CLIENTE INACTIVO'});
-                    }
-                    else {
-                      if (!dclientStored) {
-                        res.status(404).send({message: 'NO SE HA REGISTRADO DEL CLIENTE DESACTIVADO'});
-                      }
-                      else {
-                        res.status(200).send({upClient});
-                      }
-                    }
-                  });
-                }
-              }
-            });
           }
-        }
-      });
+        });
+      }
     }
-  }
+  });
+
+
 }
 
 
@@ -547,6 +378,16 @@ clientController.getImageFile = (req, res) => {
     }
   });
 }
+
+
+
+
+
+
+
+
+
+
 
 
 //**********************  GET REGISTERS *************************

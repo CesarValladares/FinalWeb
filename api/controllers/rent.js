@@ -35,58 +35,47 @@ in the request body send the next atributes in the body of the request
 */
 rentController.createRent = (req, res) => {
 
-  if (!req.headers.role) {
-    res.status(500).send({message: 'ERROR EN LA PETICION'});
+  var total = 0;
+  var params = req.body;
+  var rent = new Rent();
+  rent.date_init = new Date();
+  rent.date_end = rent.date_init.addDays(7)
+  rent.status = 'ON_LOAN';
+  rent.client = req.params.c_id;;
+  rent.books.book1 = params.book1;
+  rent.books.book2 = params.book2;
+  rent.books.book3 = params.book3;
+  rent.books.book4 = params.book4;
+  rent.books.book5 = params.book5;
 
-  } else {
-    if (req.headers.role != 'ROLE_USER') {
-      res.status(500).send({message: 'ERROR EN LA PETICION'});
+  if (rent.books.book1)
+    total = total + 1;
+  if (rent.books.book2)
+    total = total + 1;
+  if (rent.books.book3)
+    total = total + 1;
+  if (rent.books.book4)
+    total = total + 1;
+  if (rent.books.book2)
+    total = total + 1;
+
+  if (total === 0) {
+    res.status(500).send({message: 'RENTA AL MENOS UN LIBRO'});
+  }
+
+  rent.save((err, rentStored) => {
+    if (err) {
+      res.status(500).send({message: 'ERROR AL GUARDAR RENTA'});
 
     } else {
+      if (!rentStored) {
+        res.status(404).send({message: 'LA RENTA NO HA SIDO GUARDADA'});
 
-      var total = 0;
-      var params = req.body;
-      var rent = new Rent();
-      rent.date_init = new Date();
-      rent.date_end = rent.date_init.addDays(7)
-      rent.status = 'ON_LOAN';
-      rent.client = req.params.c_id;;
-      rent.books.book1 = params.book1;
-      rent.books.book2 = params.book2;
-      rent.books.book3 = params.book3;
-      rent.books.book4 = params.book4;
-      rent.books.book5 = params.book5;
-
-      if (rent.books.book1)
-        total = total + 1;
-      if (rent.books.book2)
-        total = total + 1;
-      if (rent.books.book3)
-        total = total + 1;
-      if (rent.books.book4)
-        total = total + 1;
-      if (rent.books.book2)
-        total = total + 1;
-
-      if (total === 0) {
-        res.status(500).send({message: 'RENTA AL MENOS UN LIBRO'});
+      } else {
+        res.status(200).send(rentStored);
       }
-
-      rent.save((err, rentStored) => {
-        if (err) {
-          res.status(500).send({message: 'ERROR AL GUARDAR RENTA'});
-
-        } else {
-          if (!rentStored) {
-            res.status(404).send({message: 'LA RENTA NO HA SIDO GUARDADA'});
-
-          } else {
-            res.status(200).send({rent: rentStored});
-          }
-        }
-      });
     }
-  }
+  });
 }
 
 
@@ -138,21 +127,9 @@ rentController.readRents = (req, res) => {
   var status = req.params.status;
 
   if (!clientId) { //Sacar todos las rentas de BD
-    if (status === 'ALL') {
       var find = Rent.find({}).sort('date_init');
-    } else if (status === 'ON_LOAN') {
-      var find = Rent.find({status: status}).sort('date_init');
-    } else {
-      res.status(500).send({message: 'ERROR EN LA PETICION'});
-    }
   } else { //Saca rentas del cliente
-    if (status === 'ALL') {
       var find = Rent.find({client: clientId}).sort('date_init');
-    } else if (status === 'ON_LOAN') {
-      var find = Rent.find({client: clientId, status: status}).sort('date_init');
-    } else {
-      res.status(500).send({message: 'ERROR EN LA PETICION'});
-    }
   }
 
   find.populate({path: 'client'}).exec((err, rents) => {
@@ -182,36 +159,25 @@ in the request parameters send the next atributes in the express url
   r_id: id_of_the_client (this is mandatory and is the id of a rent, it is used to modify a rent with the given id)
 */
 rentController.deactivateRent = (req, res) => {
+  var rentId = req.params.r_id;
+  var update = {
+    status: 'RETURNED'
+  };
 
-  if (!req.headers.role) {
-    res.status(500).send({message: 'ERROR EN LA PETICION'});
-
-  } else {
-    if (req.headers.role != 'ROLE_ADMIN' && req.headers.role != 'ROLE_USER') {
-      res.status(500).send({message: 'ERROR EN LA PETICION'});
+  Rent.findByIdAndUpdate(rentId, update, (err, rentUpdated) => {
+    if (err) {
+      res.status(500).send({message: 'ERROR AL ACTUALIZAR RENTA'});
 
     } else {
-      var rentId = req.params.r_id;
-      var update = {
-        status: 'RETURNED'
-      };
+      if (!rentUpdated) {
+        res.status(404).send({message: 'LA RENTA NO HA SIDO ACTUALIZADA'});
 
-      Rent.findByIdAndUpdate(rentId, update, (err, rentUpdated) => {
-        if (err) {
-          res.status(500).send({message: 'ERROR AL ACTUALIZAR RENTA'});
-
-        } else {
-          if (!rentUpdated) {
-            res.status(404).send({message: 'LA RENTA NO HA SIDO ACTUALIZADA'});
-
-          } else {
-            //RETURN UPDATED EMPLOYEE
-            res.status(200).send({rentUpdated});
-          }
-        }
-      });
+      } else {
+        //RETURN UPDATED EMPLOYEE
+        res.status(200).send({rentUpdated});
+      }
     }
-  }
+  });  
 }
 
 module.exports = rentController;
