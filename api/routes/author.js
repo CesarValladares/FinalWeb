@@ -10,7 +10,7 @@ var md_auth = require('../middlewares/authenticated');
 var multipart = require('connect-multiparty');
 var md_upload = multipart({uploadDir: './uploads/authors'});
 
-api.post('/author/:admin', md_auth.ensureAuth, authorController.createAuthor);
+api.post('/author', md_auth.ensureAuth, authorController.createAuthor);
 api.get('/author/:id', md_auth.ensureAuth, authorController.readAuthor);
 api.get('/authors', md_auth.ensureAuth, authorController.readAuthors);
 api.put('/author/:id/:admin', md_auth.ensureAuth, authorController.updateAuthor);
