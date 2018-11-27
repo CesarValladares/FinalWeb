@@ -12,7 +12,7 @@ var md_upload = multipart({uploadDir: './uploads/authors'});
 
 api.post('/author/:admin', md_auth.ensureAuth, authorController.createAuthor);
 api.get('/author/:id', md_auth.ensureAuth, authorController.readAuthor);
-api.get('/authors/:page?', md_auth.ensureAuth, authorController.readAuthors);
+api.get('/authors', md_auth.ensureAuth, authorController.readAuthors);
 api.put('/author/:id/:admin', md_auth.ensureAuth, authorController.updateAuthor);
 api.delete('/author/:id/:admin', md_auth.ensureAuth, authorController.deleteAuthor);
 api.post('/upload-image-author/:id', [md_auth.ensureAuth, md_upload] , authorController.uploadImage);

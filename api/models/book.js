@@ -17,10 +17,7 @@ var BookSchema = Schema({
   image: String,
   type: String,
   file: String,
-  author:{
-    type: Schema.ObjectId,
-    ref: 'Author'
-  },
+  author: String,
   status: String
 });
 

@@ -36,6 +36,8 @@ export class EmployeesComponent implements OnInit {
         this.resetForm(form);
         M.toast({html: 'Save Successfully'});
         this.getEmployees();
+      }, err => {
+        alert("El empleado no está correctamente creado");
       });
     }
   }

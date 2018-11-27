@@ -13,7 +13,7 @@ var md_upload = multipart({uploadDir: './uploads/clients'});
 api.post('/client/:employee?',clientController.createClient);
 api.post('/client-login', clientController.loginClient);
 api.get('/client/:id', md_auth.ensureAuth, clientController.readClient);
-api.get('/clients/:page?', md_auth.ensureAuth, clientController.readClients);
+api.get('/clients', md_auth.ensureAuth, clientController.readClients);
 api.put('/client/:id/:employee?', md_auth.ensureAuth, clientController.updateClient);
 api.delete('/client/:id/:employee', md_auth.ensureAuth, clientController.deleteClient);
 api.post('/upload-image-client/:id', [md_auth.ensureAuth, md_upload] , clientController.uploadImage);
