@@ -24,22 +24,12 @@ export class BooksComponent implements OnInit {
     this.bookService.getBooks()
       .subscribe(
         response => {
-        this.bookService.books = response as Books[];
-        console.log(response);
-      } , error => {
-        console.log(error);
-      });
-  }
-
-  getBooks(){
-    this.bookService.getBooks()
-      .subscribe(
-        response => {
         this.bookService.books = response as Book[];
         console.log(response);
       } , error => {
         console.log(error);
       });
   }
+
 
 }
