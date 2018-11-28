@@ -54,7 +54,7 @@ clientController.createClient = (req, res) => {
       //Encriptar contraseña y guardar datos
       bcrypt.hash(params.password, null, null, function(err, hash){
         if (client.name != null && client.surname != null && client.email != null) {
-          //client.password = hash;
+          client.password = hash;
           //Guarar usuario en BD
           client.save((err, clientStored) => {
             if (err) {
