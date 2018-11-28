@@ -1,5 +1,4 @@
 
-
 <nav class="nav-wrapper green darken-4">
    <div class="container">
       <a href="/" class=" loguito">BIBLIOTECA VIRTUAL</a>
@@ -7,14 +6,13 @@
           <li><a href="#." (click)="showEmployees()">Employees</a></li>
           <li> <a href="#." (click)="showBooks()">Books</a></li>
           <li> <a href="#." (click)="showClients()">Clients</a></li>
-          <li> <a href="#." (click)="showRents()">Rents</a></li>
           <li> <a href="#." (click)="showGoogleAPI()">Contacto</a></li>
         </ul>
-  </div>
+  </div>  
 </nav>
 
 <div *ngIf="identity" class="navigation col-lg-1">
-
+   
     <div *ngIf="bookWindow">
         <app-books></app-books>
     </div>
@@ -24,21 +22,17 @@
     <div *ngIf="clientWindow">
         <app-clients></app-clients>
     </div>
-    <div *ngIf="rentWindow">
-        <app-rents></app-rents>
-    </div>
     <div *ngIf="googleWindow">
         <app-google-maps></app-google-maps>
     </div>
     <br>
     <span class="btn red right" (click)="logout()">
       Cerrar Sesión
-      <i class="material-icons">close</i>
     </span>
-
+  
 </div>
 
-
+    
 
 <!-- FORMULARIOS LOGIN-->
 <div class="container">
@@ -50,13 +44,13 @@
                 <!-- LOGIN -->
                 <div class="col-lg-6">
                   <h1>Inicio de Sesión</h1>
-
+              
                   <div *ngIf="errorMessage">
                     <div class="alert alert-info">
                       <strong>ERROR</strong> {{errorMessage}}
                     </div>
                   </div>
-
+              
                   <form #loginForm="ngForm" (ngSubmit)="onSubmit()" class="col-md-7">
                     <p>
                       <label>Correo electrónico: </label>
@@ -78,3 +72,5 @@
   </div>
 </div>
 <!-- FORMULARIOS LOGIN-->
+  
+    

@@ -1,21 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { EmployeeService } from './services/employee.service';
 import { BookService } from './services/book.service';
-import { ClientService } from './services/client.service';
-import { RentService } from './services/rent.service';
-
 import { Employee } from './models/employee';
 import { Book } from './models/book';
 import { Client } from './models/client';
-import { Rent } from './models/rent';
 import { NgForm } from '@angular/forms';
+import { ClientService } from './services/client.service';
 
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [EmployeeService, BookService, ClientService, RentService]
+  providers: [EmployeeService, BookService, ClientService]
 })
 
 export class AppComponent implements OnInit {
@@ -29,7 +26,6 @@ export class AppComponent implements OnInit {
   public bookWindow: boolean = false;
   public employeeWindow: boolean = false;
   public clientWindow: boolean = false;
-  public rentWindow: boolean = false;
   public googleWindow: boolean = false;
 
 
@@ -123,36 +119,24 @@ export class AppComponent implements OnInit {
     this.bookWindow = true;
     this.employeeWindow = false;
     this.clientWindow = false;
-    this.rentWindow = false;
-    this.googleWindow= false;
   }
 
   public showEmployees(){
     this.bookWindow = false;
     this.employeeWindow = true;
     this.clientWindow = false;
-    this.rentWindow = false;
     this.googleWindow= false;
   }
   public showClients(){
     this.bookWindow = false;
     this.employeeWindow = false;
     this.clientWindow = true;
-    this.rentWindow = false;
-    this.googleWindow= false;
-  }
-  public showRents(){
-    this.bookWindow = false;
-    this.employeeWindow = false;
-    this.clientWindow = false;
-    this.rentWindow = true;
     this.googleWindow= false;
   }
   public showGoogleAPI(){
     this.bookWindow = false;
     this.employeeWindow = false;
     this.clientWindow = false;
-    this.rentWindow = false;
     this.googleWindow= true;
   }
 }
