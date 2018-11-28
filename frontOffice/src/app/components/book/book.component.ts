@@ -28,4 +28,9 @@ export class BookComponent implements OnInit {
         console.log(error);
       });
   }
+
+  registerRent(_id: string){
+      console.log('CREATE');
+
+  }
 }
