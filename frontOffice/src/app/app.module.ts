@@ -9,13 +9,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { ClientsComponent } from './components/clients/clients.component';
+import { BookComponent } from './components/book/book.component';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    ClientsComponent
+    ClientsComponent,
+    BookComponent
   ],
   imports: [
     BrowserModule,

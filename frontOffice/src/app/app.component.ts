@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ClientService } from './services/clientServices/client.service';
+import { BookService } from './services/bookServices/book.service';
 import { Client } from './models/client';
 import { NgForm } from '@angular/forms';
 
@@ -8,7 +9,7 @@ import { NgForm } from '@angular/forms';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [ClientService]
+  providers: [ClientService, BookService]
 })
 export class AppComponent implements OnInit {
   title = 'backOffice';
@@ -21,7 +22,8 @@ export class AppComponent implements OnInit {
   public alertRegister;
 
   constructor (
-    public clientService: ClientService
+    public clientService: ClientService,
+    public bookService: BookService
   ) {
     this.client = new Client('', '', '', '', '', '' , '', 'ROLE_CLIENT', '');
     this.client_register = new Client('', '', '', '', '', '' , '', 'ROLE_CLIENT', '');

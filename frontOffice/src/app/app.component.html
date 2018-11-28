@@ -1,5 +1,12 @@
-<div *ngIf="!identity">
-  <div class= "login-box-iniciar">
+<nav class="nav-wrapper green darken-4">
+  <div class="container">
+    <a href="/" class="brand-logo">BIBLIOTECA VIRTUAL</a>
+
+  </div>
+</nav>
+
+
+  <div class= "login-box-iniciar" *ngIf="!identity">
     <h1>Iniciar Sesión</h1>
     <form #clientForm="ngForm" (ngSubmit)="onSubmit()">
       <div class="textbox">
@@ -18,10 +25,19 @@
 
   </div>
 
-
-
-  <div>
+  <div *ngIf="!identity">
     <app-clients></app-clients>
   </div>
 
+  <div *ngIf="identity" class="navigation col-lg-1">
+    <span class="btn red right" (click)="logout()">
+      Cerrar Sesión
+      <i class="material-icons">close</i>
+    </span>
+
 </div>
+
+
+
+
+
