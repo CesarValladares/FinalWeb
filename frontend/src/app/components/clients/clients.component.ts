@@ -16,6 +16,7 @@ export class ClientsComponent implements OnInit {
   constructor(private clientService: ClientService) { }
 
   ngOnInit() {
+    console.log('OnInit');
     this.getClients();
   }
 
@@ -41,6 +42,7 @@ export class ClientsComponent implements OnInit {
   }
 
   getClients(){
+    console.log('GetClients cc');
     this.clientService.getClients()
       .subscribe(
         response => {

@@ -20,6 +20,7 @@ export class ClientService {
    }
 
    getClients() {
+    console.log('GetClients Service');
     let headers = new HttpHeaders({'Authorization': this.getToken(),
                                    'Content-Type': 'application/json'});
     return this.http.get(this.URL_API + 'clients',{headers: headers});
