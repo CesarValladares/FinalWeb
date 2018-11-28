@@ -223,6 +223,7 @@ in the request parameters send the next atributes in the express url
 */
 clientController.updateClient = (req, res) => {
 
+  var clientId = req.params.id;
   var update = req.body;
 
   Client.findByIdAndUpdate(clientId, update, (err, clientUpdated) => {
@@ -271,6 +272,7 @@ in the request parameters send the next atributes in the express url
 */
 clientController.deleteClient = (req,res) => {
 
+  var clientId = req.params.id;
   var update = {status: 'INACTIVE'};
 
   Client.findByIdAndUpdate(clientId, update, (err, clientUpdated) => {

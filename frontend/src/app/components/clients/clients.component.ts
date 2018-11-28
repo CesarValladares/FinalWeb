@@ -22,6 +22,7 @@ export class ClientsComponent implements OnInit {
 
   addClient(form: NgForm) {
     if(form.value._id){
+      console.log('Update Client');
       this.clientService.putClient(form.value)
         .subscribe(res => {
           this.resetForm(form);
@@ -42,7 +43,6 @@ export class ClientsComponent implements OnInit {
   }
 
   getClients(){
-    console.log('GetClients cc');
     this.clientService.getClients()
       .subscribe(
         response => {
