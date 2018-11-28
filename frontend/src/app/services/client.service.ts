@@ -34,6 +34,7 @@ export class ClientService {
 
   /*UPDATE AN Client*/
   putClient(client: Client) {
+    console.log('Update Client Service');
     let headers = new HttpHeaders({'Authorization': this.getToken(),
                                    'Content-Type': 'application/json'});
     return this.http.put(this.URL_API + 'client/' + `${client._id}`, client, {headers: headers});
