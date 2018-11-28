@@ -3,7 +3,7 @@
     <div class="col s12">
       <div class="card">
 
-      <table class="striped centered">
+      <table id="bookTable" class="striped centered">
         <thead  class="responsive-table">
           <tr >
               <th>Title</th>
@@ -16,6 +16,7 @@
               <th>Type</th>
               <th>File</th>
               <th>Status</th>
+              <th>Want it?</th>
           </tr>
 
         </thead>
@@ -31,7 +32,7 @@
             <td>{{ book.type }}</td>
             <td>{{ book.file }}</td>
             <td>{{ book.status }}</td>
-            <td><a href="localhost:3977/api/file-book/{{ book.file }}">Rentar</a></td>
+            <td><a href="localhost:3977/api/file-book/{{ book.file }}">Rent</a></td>
           </tr>
         </tbody>
       </table>
