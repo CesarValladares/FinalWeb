@@ -16,8 +16,28 @@ export class BooksComponent implements OnInit {
   constructor(private bookService: BookService) { }
 
   ngOnInit() {
-    console.log('INICIANDO LIBROS');
     this.getBooks();
+  }
+
+  addBook(form: NgForm) {
+    if(form.value._id){
+      this.bookService.putBook(form.value)
+        .subscribe(res => {
+          this.resetForm(form);
+          M.toast({html: 'Updated Successfully'});
+          this.getBooks();
+        });
+    }else{
+      console.log('CREATE');
+      this.bookService.postBook(form.value)
+      .subscribe(res => {
+        this.resetForm(form);
+        M.toast({html: 'Save Successfully'});
+        this.getBooks();
+      }, err => {
+        alert("El libro no se creo correctamente");
+      });
+    }
   }
 
   getBooks(){
@@ -31,5 +51,29 @@ export class BooksComponent implements OnInit {
       });
   }
 
+<<<<<<< HEAD
+=======
+  editBook(book: Book){
+    this.bookService.selectedBook = book;
+  }
+
+  deleteBook(_id: string){
+    if(confirm('Are you sure you want to delete it?')){
+      console.log(_id);
+      this.bookService.deleteBook(_id)
+        .subscribe(res => {
+          M.toast({html: 'Book Deleted'});
+          this.getBooks();
+        });
+    }
+  }
+
+  resetForm(form?: NgForm) {
+    if(form){
+      form.reset();
+      this.bookService.selectedBook = new Book;
+    }
+  }
+>>>>>>> 06dcc4abafddca6874fbac75e3d208ef52872979
 
 }

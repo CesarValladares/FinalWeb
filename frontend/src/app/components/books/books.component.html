@@ -3,11 +3,11 @@
       <div class="col s12">
         <div class="card">
           <div class="card-content">
-            <form #bookForm="ngForm" (ngSubmit)="addbook(bookForm)">
+            <form #bookForm="ngForm" (ngSubmit)="addBook(bookForm)">
               <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="bookService.selectedBook._id">
               <div class="row">
                   <div class="input-field col s12">
-                    <input type="text" name="title" #name="ngModel" [(ngModel)]="bookService.selectedBook.name" placeholder="Enter the title">
+                    <input type="text" name="title" #name="ngModel" [(ngModel)]="bookService.selectedBook.title" placeholder="Enter the title">
                   </div>
                   <div class="input-field col s12">
                       <input type="text" name="description" #surname="ngModel" [(ngModel)]="bookService.selectedBook.description" placeholder="Enter the description">
@@ -17,6 +17,9 @@
                   </div>
                   <div class="input-field col s12">
                       <input type="text" name="year" #username="ngModel" [(ngModel)]="bookService.selectedBook.year" placeholder="Enter the year">
+                  </div>
+                  <div class="input-field col s12">
+                      <input type="text" name="author" #status="ngModel" [(ngModel)]="bookService.selectedBook.author" placeholder="Author">
                   </div>
                   <div class="input-field col s12">
                       <input type="text" name="pages" #password="ngModel" [(ngModel)]="bookService.selectedBook.pages" placeholder="Enter the pages">
@@ -50,7 +53,7 @@
                       <button class="btn #66bb6a green lighten-1">Save</button>
                       <button class="btn right #00e5ff cyan accent-3" (click)="resetForm(bookForm)">Clean</button>
                     </div>
-  
+
                   </div>
               </div>
             </form>
@@ -75,7 +78,7 @@
                 <th>File</th>
                 <th>Status</th>
             </tr>
-           
+
           </thead>
           <tbody>
             <tr *ngFor="let book of bookService.books" >
@@ -94,10 +97,10 @@
               <td>{{ book.file }}</td>
               <td>{{ book.status }}</td>
               <td>
-                <a (click)="editbook(book)">
+                <a (click)="editBook(book)">
                   <i class="material-icons">edit</i>
                 </a>
-                <a (click)="deletebook(book._id)">
+                <a (click)="deleteBook(book._id)">
                     <i class="material-icons">delete</i>
                   </a>
               </td>
@@ -107,4 +110,3 @@
       </div>
     </div>
   </div>
-  

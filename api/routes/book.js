@@ -13,7 +13,7 @@ var md_file_upload = multipart({uploadDir: './uploads/books/files'});
 
 api.post('/book', md_auth.ensureAuth, bookController.createBook);
 api.get('/book/:id', md_auth.ensureAuth, bookController.readBook);
-api.get('/books/:author?', md_auth.ensureAuth, bookController.readBooks);
+api.get('/books', md_auth.ensureAuth, bookController.readBooks);
 api.put('/book/:id', md_auth.ensureAuth, bookController.updateBook);
 api.delete('/book/:id', md_auth.ensureAuth, bookController.deleteBook);
 api.post('/image-book/:id', [md_auth.ensureAuth, md_image_upload] , bookController.uploadImage);
