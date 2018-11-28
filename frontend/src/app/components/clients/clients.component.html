@@ -4,31 +4,31 @@
         <div class="card">
           <div class="card-content">
             <form #clientForm="ngForm" (ngSubmit)="addClient(clientForm)">
-              <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="clientService.selectedclient._id">
+              <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="clientService.selectedClient._id">
               <div class="row">
                   <div class="input-field col s12">
-                    <input type="text" name="name" #name="ngModel" [(ngModel)]="clientService.selectedclient.name" placeholder="Enter your name">
+                    <input type="text" name="name" #name="ngModel" [(ngModel)]="clientService.selectedClient.name" placeholder="Enter your name">
                   </div>
                   <div class="input-field col s12">
-                      <input type="text" name="surname" #surname="ngModel" [(ngModel)]="clientService.selectedclient.surname" placeholder="Enter your surname">
+                      <input type="text" name="surname" #surname="ngModel" [(ngModel)]="clientService.selectedClient.surname" placeholder="Enter your surname">
                   </div>
                   <div class="input-field col s12">
-                      <input type="email" name="email" #email="ngModel" [(ngModel)]="clientService.selectedclient.email" placeholder="Enter your email">
+                      <input type="email" name="email" #email="ngModel" [(ngModel)]="clientService.selectedClient.email" placeholder="Enter your email">
                   </div>
                   <div class="input-field col s12">
-                      <input type="text" name="username" #username="ngModel" [(ngModel)]="clientService.selectedclient.username" placeholder="Enter your username">
+                      <input type="text" name="username" #username="ngModel" [(ngModel)]="clientService.selectedClient.username" placeholder="Enter your username">
                   </div>
                   <div class="input-field col s12">
-                      <input type="text" name="password" #password="ngModel" [(ngModel)]="clientService.selectedclient.password" placeholder="Enter your password">
+                      <input type="text" name="password" #password="ngModel" [(ngModel)]="clientService.selectedClient.password" placeholder="Enter your password">
                   </div>
                   <div class="input-field col s12">
-                      <input type="text" name="image" #image="ngModel" [(ngModel)]="clientService.selectedclient.image" placeholder="Enter your image">
+                      <input type="text" name="image" #image="ngModel" [(ngModel)]="clientService.selectedClient.image" placeholder="Enter your image">
                   </div>
                   <div class="input-field col s12">
-                      <input type="text" name="role" #role="ngModel" [(ngModel)]="clientService.selectedclient.role" placeholder="Enter your role">
+                      <input type="text" name="role" #role="ngModel" [(ngModel)]="clientService.selectedClient.role" placeholder="Enter your role">
                   </div>
                   <div class="input-field col s12">
-                      <input type="text" name="status" #status="ngModel" [(ngModel)]="clientService.selectedclient.status" placeholder="Enter your status">
+                      <input type="text" name="status" #status="ngModel" [(ngModel)]="clientService.selectedClient.status" placeholder="Enter your status">
                   </div>
   
                   <div class="card-action">

@@ -22,28 +22,27 @@ export class ClientService {
    getClients() {
     let headers = new HttpHeaders({'Authorization': this.getToken(),
                                    'Content-Type': 'application/json'});
-    return this.http.get(this.URL_API + 'Clients',{headers: headers});
+    return this.http.get(this.URL_API + 'clients',{headers: headers});
   }
 
   /*LLAMAR ULR PARA CREAR USUARIO*/
-  postClient(Client: Client) {
-    let headers = new HttpHeaders({'Authorization': this.getToken(),
-                                   'Content-Type': 'application/json'});
-    return this.http.post(this.URL_API + 'Client', Client, {headers: headers});
+  postClient(client: Client) {
+    let headers = new HttpHeaders({'Content-Type': 'application/json'});
+    return this.http.post(this.URL_API + 'client', client, {headers: headers});
   }
 
   /*UPDATE AN Client*/
-  putClient(Client: Client) {
+  putClient(client: Client) {
     let headers = new HttpHeaders({'Authorization': this.getToken(),
                                    'Content-Type': 'application/json'});
-    return this.http.put(this.URL_API + 'Client/' + `${Client._id}`, Client, {headers: headers});
+    return this.http.put(this.URL_API + 'client/' + `${client._id}`, client, {headers: headers});
   }
 
   deleteClient (_id: string) {
     console.log('ID::' + _id);
     let headers = new HttpHeaders({'Authorization': this.getToken(),
                                    'Content-Type': 'application/json'});
-    return this.http.delete(this.URL_API + 'Client/' + `${_id}`, {headers: headers});
+    return this.http.delete(this.URL_API + 'client/' + `${_id}`, {headers: headers});
   }
 
   getIdentity(){
