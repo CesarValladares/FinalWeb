@@ -26,6 +26,7 @@ export class AppComponent implements OnInit {
   public bookWindow: boolean = false;
   public employeeWindow: boolean = false;
   public clientWindow: boolean = false;
+  public googleWindow: boolean = false;
 
 
   constructor(
@@ -124,10 +125,18 @@ export class AppComponent implements OnInit {
     this.bookWindow = false;
     this.employeeWindow = true;
     this.clientWindow = false;
+    this.googleWindow= false;
   }
   public showClients(){
     this.bookWindow = false;
     this.employeeWindow = false;
     this.clientWindow = true;
+    this.googleWindow= false;
+  }
+  public showGoogleAPI(){
+    this.bookWindow = false;
+    this.employeeWindow = false;
+    this.clientWindow = false;
+    this.googleWindow= true;
   }
 }
