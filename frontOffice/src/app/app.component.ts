@@ -20,6 +20,7 @@ export class AppComponent implements OnInit {
   public token;
   public errorMessage;
   public alertRegister;
+  public bookWindow: boolean = false;
 
   constructor (
     public clientService: ClientService,
@@ -89,5 +90,9 @@ export class AppComponent implements OnInit {
     localStorage.clear();
     this.identity = null;
     this.token = null;
+  }
+
+  public showBooks() {
+    this.bookWindow = true;
   }
 }

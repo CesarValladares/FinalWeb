@@ -22,9 +22,9 @@ export class BookService {
   }
 
   getBooks() {
-    console.log('Conectar a BD --------');
-    return this.http.get(this.URL_API + 'books');
-
+    const headers = new HttpHeaders({'Authorization': this.getToken(),
+                                   'Content-Type': 'application/json'});
+    return this.http.get(this.URL_API + 'books', {headers: headers});
   }
 
   getIdentity() {
