@@ -51,8 +51,6 @@ export class BooksComponent implements OnInit {
       });
   }
 
-<<<<<<< HEAD
-=======
   editBook(book: Book){
     this.bookService.selectedBook = book;
   }
@@ -74,6 +72,5 @@ export class BooksComponent implements OnInit {
       this.bookService.selectedBook = new Book;
     }
   }
->>>>>>> 06dcc4abafddca6874fbac75e3d208ef52872979
 
 }

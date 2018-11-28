@@ -40,6 +40,9 @@
     <div *ngIf="employeeWindow">
         <app-employees></app-employees>
     </div>
+    <div *ngIf="clientWindow">
+        <app-clients></app-clients>
+    </div>
     <br>
     <span class="btn red right" (click)="logout()">
       Cerrar Sesión
