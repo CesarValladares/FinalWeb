@@ -1,11 +1,10 @@
+
 <nav class="nav-wrapper green darken-4">
   <div class="container">
-    <a href="/" class="brand-logo">BIBLIOTECA VIRTUAL</a>
+    <a href="/" class="brand-logo">BIBLIOTECA VIRTUAL EzBAC</a>
 
   </div>
 </nav>
-
-
   <div class= "login-box-iniciar" *ngIf="!identity">
     <h1>Iniciar Sesión</h1>
     <form #clientForm="ngForm" (ngSubmit)="onSubmit()">
@@ -30,13 +29,12 @@
   </div>
 
   <div *ngIf="identity" class="navigation col-lg-1">
-    <span class="btn red right" (click)="logout()">
+    <span id="exitBtn" class="btn red right" (click)="logout()">
       Cerrar Sesión
       <i class="material-icons">close</i>
     </span>
 
     <app-book></app-book>
-
 </div>
 
 

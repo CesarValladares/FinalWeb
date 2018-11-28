@@ -1,11 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
 @import "https://use.fontawesome.com/releases/v5.5.0/css/all.css";
 
+* {
+    font-family: 'Roboto', sans-serif;
+    color: white;
+    text-decoration: none;
+}
+
 body{
 
     margin: 0;
     padding: 0;
-    background-image: url('./app/components/clients/img/blue.jpg');
+    background-image: url('./app/components/clients/img/library.jpg');
     background-size: cover;
 }
 
@@ -16,8 +22,25 @@ body{
     left: 25%;
     transform: translate(-50%,-50%);
     color: white;
-
+    background-color: #333;
+    padding: 30px;
+    padding-top: 10px;
 }
+
+.login-box-iniciar form .btn, .login-box-registrar form .btn {
+    background-color: #39a042;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+    margin-top: 20px;
+}
+
+.login-box-iniciar form .btn:hover {
+    background-color: #44b54e;
+}
+
 .login-box-registrar{
 
   position: absolute;
@@ -25,7 +48,9 @@ body{
   left: 75%;
   transform: translate(-50%,-50%);
   color: white;
-
+    background-color: #333;
+    padding: 30px;
+    padding-top: 10px;
 }
 
 .login-box-iniciar h1{
@@ -68,4 +93,88 @@ body{
     display: inline-block;
     font-size: 16px;
 
+}
+
+#exitBtn {
+    padding: 20px;
+    background-color: #931f28;
+    cursor: pointer;
+    border-radius: 5px;
+    position: absolute;
+    right: 20px;
+    bottom: 30px;
+    transition: background-color 0.5s ease;
+}
+
+#exitBtn:hover {
+    background-color: #ad242f;
+}
+
+#bookTable {
+    border-collapse: collapse;
+    background-color: #666;
+    margin-left: 20px;
+    margin-top: 20px;
+    border: #DDD 1px solid;
+    border-radius: 4px;
+}
+
+
+#bookTable thead tr th {
+    padding: 12px;
+    padding-left: 4px;
+    padding-right: 40px;
+    text-align: left;
+    color: white;
+}
+
+#bookTable tr:nth-child(odd){background-color: white;}
+#bookTable tr:nth-child(even){background-color: #DDD;}
+
+#bookTable thead tr {
+    background-color: #931f28 !important;
+}
+
+#bookTable a {
+    color: green;
+    font-weight: bold;
+}
+
+#bookTable td {
+    padding-top: 5px;
+    padding-bottom: 5px;    
+    padding-left: 4px;
+    color: #333;
+}
+
+@media only screen and (max-width: 600px) {
+    .login-box-iniciar, .login-box-registrar {
+        width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        position: relative;
+        top: 0;
+        left: 0;
+        transform: none;
+        -web-kit-transform: none;
+    }
+
+    #bookTable {
+        margin-left: 4px;
+    }
+
+    #bookTable thead tr th{
+        padding: 0px;
+        padding-left: 4px;
+        padding-right: 0px;
+        text-align: left;
+        color: white;
+        font-size: 8px;
+    }
+
+    #bookTable td {
+        font-size: 8px;
+    }
 }
