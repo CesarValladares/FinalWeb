@@ -30,7 +30,14 @@ export class BookComponent implements OnInit {
       });
   }
 
-  registerRent(_id: string){
-
+  registerRent(book: string){
+      console.log('CREATE');
+      this.rentService.postRent(book)
+      .subscribe( res => {
+        //this.resetForm(form);
+      }, err => {
+        alert('La renta no fue registrada correctamente');
+        console.log(err);
+      });
   }
 }

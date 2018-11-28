@@ -13,7 +13,7 @@ export class ClientService {
 
   selectedClient: Client;
   clients: Client[];
-  public identity;
+  public identity : Client;
   public token;
   readonly URL_API = 'http://localhost:3977/api/';
 

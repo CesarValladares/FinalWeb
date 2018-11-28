@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
   public errorMessage;
   public alertRegister;
   public bookWindow: boolean = false;
+  public googleWindow: boolean = false;
 
   constructor (
     public clientService: ClientService,
