@@ -1,17 +1,35 @@
 
 <nav class="nav-wrapper green darken-4">
-  <div class="container">
-    <a href="/" class="brand-logo">BIBLIOTECA VIRTUAL</a>
-   
-  </div>
-  <ul> 
-     
-      <span class="btn blue right" (click)="showBooks()">Books</span>
-      <span class="btn blue right" (click)="showEmployees()">Employees</span>
-    
-  </ul>
-    
+   <div class="container">
+      <a href="/" class="brand-logo">BIBLIOTECA VIRTUAL</a>
+        <ul id="nav-mobile" *ngIf="identity" class="right hide-on-med-and-down letter-nav">
+          <li><a href="#." (click)="showEmployees()">Employees</a></li>
+          <li> <a href="#." (click)="showBooks()">Books</a></li>
+        </ul>
+  </div>  
 </nav>
+
+
+<nav>
+    <div class="nav-wrapper">
+      <a href="#!" class="brand-logo">Logo</a>
+      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="sass.html">Sass</a></li>
+        <li><a href="badges.html">Components</a></li>
+        <li><a href="collapsible.html">Javascript</a></li>
+        <li><a href="mobile.html">Mobile</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <ul class="sidenav" id="mobile-demo">
+    <li><a href="sass.html">Sass</a></li>
+    <li><a href="badges.html">Components</a></li>
+    <li><a href="collapsible.html">Javascript</a></li>
+    <li><a href="mobile.html">Mobile</a></li>
+  </ul>
+          
 
 
 <div *ngIf="identity" class="navigation col-lg-1">
@@ -72,6 +90,12 @@
 <!-- FORMULARIOS LOGIN-->
 
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var elems = document.querySelectorAll('.sidenav');
+      var instances = M.Sidenav.init(elems, options);
+    });
 
+</script>
     
     
