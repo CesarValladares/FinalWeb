@@ -28,17 +28,17 @@ export class BookService {
   }
 
   /*LLAMAR ULR PARA CREAR USUARIO*/
-  postBook(Book: Book) {
+  postBook(book: Book) {
     let headers = new HttpHeaders({'Authorization': this.getToken(),
                                    'Content-Type': 'application/json'});
-    return this.http.post(this.URL_API + 'book', Book, {headers: headers});
+    return this.http.post(this.URL_API + 'book', book, {headers: headers});
   }
 
   /*UPDATE AN Book*/
-  putBook(Book: Book) {
+  putBook(book: Book) {
     let headers = new HttpHeaders({'Authorization': this.getToken(),
                                    'Content-Type': 'application/json'});
-    return this.http.put(this.URL_API + 'book/' + `${Book._id}`, Book, {headers: headers});
+    return this.http.put(this.URL_API + 'book/' + `${book._id}`, book, {headers: headers});
   }
 
   deleteBook (_id: string) {
