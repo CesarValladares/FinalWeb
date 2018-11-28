@@ -12,6 +12,8 @@ var multipart = require('connect-multiparty');
 api.post('/rent', md_auth.ensureAuth, rentController.createRent);
 api.get('/rent/:id', md_auth.ensureAuth, rentController.readRent);
 api.get('/rents/:c_id?', md_auth.ensureAuth, rentController.readRents);
+api.get('/rents-onloan/:c_id?', md_auth.ensureAuth, rentController.readOnLoanRents);
+api.get('/rents-returned/:c_id?', md_auth.ensureAuth, rentController.readReturnedRents);
 api.put('/deactivate-rent/:r_id', md_auth.ensureAuth, rentController.deactivateRent);
 
 module.exports = api;

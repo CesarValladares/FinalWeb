@@ -110,12 +110,65 @@ in the request parameters send the next atributes in the express url
 */
 rentController.readRents = (req, res) => {
 
+  console.log('RENTS REQ');
   var clientId = req.params.c_id;
 
   if (!clientId) { //Sacar todos las rentas de BD
       var find = Rent.find({}).sort('date_init');
   } else { //Saca rentas del cliente
       var find = Rent.find({client: clientId}).sort('date_init');
+  }
+
+  find.exec((err, rents) => {
+    if (err) {
+      res.status(500).send({message: 'ERROR EN LA PETICION'});
+    } else {
+      if (!rents) {
+        res.status(404).send({message: 'NO HAY RENTAS'});
+      } else {
+        res.json(rents);
+      }
+    }
+  });
+}
+
+
+rentController.readOnLoanRents = (req, res) => {
+
+  console.log('OL_RENTS REQ');
+
+  var clientId = req.params.c_id;
+
+  if (!clientId) { //Sacar todos las rentas de BD
+      var find = Rent.find({status: 'ON_LOAN'}).sort('date_init');
+  } else { //Saca rentas del cliente
+      var find = Rent.find({client: clientId, status: 'ON_LOAN'}).sort('date_init');
+  }
+
+  find.exec((err, rents) => {
+    if (err) {
+      res.status(500).send({message: 'ERROR EN LA PETICION'});
+    } else {
+      if (!rents) {
+        res.status(404).send({message: 'NO HAY RENTAS'});
+      } else {
+        res.json(rents);
+      }
+    }
+  });
+}
+
+
+rentController.readReturnedRents = (req, res) => {
+
+  console.log('RET_RENTS REQ');
+
+  var clientId = req.params.c_id;
+
+  if (!clientId) { //Sacar todos las rentas de BD
+      var find = Rent.find({status: 'RETURNED'}).sort('date_init');
+  } else { //Saca rentas del cliente
+      var find = Rent.find({client: clientId, status: 'RETURNED'}).sort('date_init');
   }
 
   find.exec((err, rents) => {

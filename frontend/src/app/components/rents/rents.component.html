@@ -1,0 +1,47 @@
+<div class="container">
+    <div class="row">
+      <div class="col s12">
+        <div class="card">
+          <div class="card-content">
+
+              <div class="row">
+                  <div class="card-action">
+                    <div class="input-field col s12">
+                      <button class="btn left #00e5ff red accent-3" (click)="getOnLoanRents()">OnLoan</button>
+                      <button class="btn  #00e5ff green accent-3" (click)="getReturnedRents()">Returned</button>
+                      <button class="btn  #00e5ff gray accent-3" (click)="getRents()">All</button>
+                    </div>
+                  </div>
+              </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <table class="striped centered">
+          <thead  class="responsive-table">
+            <tr >
+                <th>ID</th>
+                <th>From</th>
+                <th>Till</th>
+                <th>Status</th>
+                <th>Client</th>
+                <th>Book</th>
+            </tr>
+
+          </thead>
+          <tbody>
+            <tr *ngFor="let rent of rentService.rents" >
+              <td>{{ rent._id }}</td>
+              <td>{{ rent.date_init }}</td>
+              <td>{{ rent.date_end }}</td>
+              <td>{{ rent.status }}</td>
+              <td>{{ rent.client }}</td>
+              <td>{{ rent.book }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
