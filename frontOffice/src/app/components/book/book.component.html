@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="row">
+    <div class="col s12">
+      <div class="card">
+
+      <table class="striped centered">
+        <thead  class="responsive-table">
+          <tr >
+              <th>Title</th>
+              <th>Description</th>
+              <th>Genre</th>
+              <th>Year</th>
+              <th>Pages</th>
+              <th>Editorial</th>
+              <th>Total</th>
+              <th>OnLoan</th>
+              <th>InHouse</th>
+              <th>Image</th>
+              <th>Type</th>
+              <th>File</th>
+              <th>Status</th>
+          </tr>
+
+        </thead>
+        <tbody>
+          <tr *ngFor="let book of bookService.books" >
+            <td>{{ book.title }}</td>
+            <td>{{ book.description }}</td>
+            <td>{{ book.genre }}</td>
+            <td>{{ book.year }}</td>
+            <td>{{ book.pages }}</td>
+            <td>{{ book.editorial }}</td>
+            <td>{{ book.total }}</td>
+            <td>{{ book.onloan }}</td>
+            <td>{{ book.inhouse }}</td>
+            <td>{{ book.image }}</td>
+            <td>{{ book.type }}</td>
+            <td>{{ book.file }}</td>
+            <td>{{ book.status }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

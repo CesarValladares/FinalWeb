@@ -35,6 +35,8 @@ in the request body send the next parameters
 */
 bookController.createBook = (req, res) => {
 
+  console.log('CREATE BOOK REQ');
+
   var book = new Book();
   var employeeId = req.params.admin;
 
@@ -86,9 +88,11 @@ in the request parameters send the next atributes in the express url
 */
 bookController.readBook = (req, res) => {
 
+  console.log('GET BOOK REQ');
+
   var bookId = req.params.id;
 
-  Book.findById(bookId).populate({path: 'author'}).exec((err, book) => {
+  Book.findById(bookId).exec((err, book) => {
     if (err) {
       res.status(500).send({message: 'ERROR EN LA PETICION'});
 
@@ -117,15 +121,10 @@ in the request parameters send the next atributes in the express url
   author: id_of_author (this is not mandatory) -> used to get the list of books by author
 */
 bookController.readBooks = (req, res) => {
-  var authorId = req.params.author;
 
-  if (!authorId) { //Sacar todos los libros de BD
-    var find = Book.find({}).sort('title');
-  } else { //Saca libros de autor
-    var find = Book.find({author: authorId}).sort('name');
-  }
+  console.log('BOOKS REQ');
 
-  find.populate({path: 'author'}).exec((err, books) => {
+  Book.find({status: 'ACTIVE'}).sort('title').exec((err, books) => {
     if (err) {
       res.status(500).send({message: 'ERROR EN LA PETICION'});
     } else {
@@ -153,6 +152,8 @@ in the request parameters send the next atributes in the express url
 in the reques body send the parameters that will be updated
 */
 bookController.updateBook = (req, res) => {
+
+  console.log('UPDATE BOOK REQ');
 
   var bookId = req.params.id;
   var update = req.body;
@@ -198,6 +199,9 @@ in the request parameters send the next atributes in the express url
   id: id_of_book_to_deactivate (this is mandatory)
 */
 bookController.deleteBook = (req,res) => {
+
+  console.log('DELETE BOOK REQ');
+
   var bookId = req.params.id;
   var update = {status: 'INACTIVE'};
 
