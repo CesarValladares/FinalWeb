@@ -19,7 +19,7 @@ api.delete('/book/:id', md_auth.ensureAuth, bookController.deleteBook);
 api.post('/image-book/:id', [md_auth.ensureAuth, md_image_upload] , bookController.uploadImage);
 api.get('/image-book/:imageFile', md_auth.ensureAuth, bookController.getImageFile);
 api.post('/file-book/:id', [md_auth.ensureAuth, md_file_upload] , bookController.uploadBookFile);
-api.get('/file-book/:bookFile', md_auth.ensureAuth, bookController.getBookFile);
+api.get('/file-book/:bookFile', bookController.getBookFile);
 
 
 //GET REGISTERS OF AUTHORS

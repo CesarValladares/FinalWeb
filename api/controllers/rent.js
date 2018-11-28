@@ -93,7 +93,7 @@ rentController.readRent = (req, res) => {
 
   var rentId = req.params.id;
 
-  Rent.findById(rentId).populate([{path: 'client'}]).exec((err, rent) => {
+  Rent.findById(rentId).exec((err, rent) => {
     if (err) {
       res.status(500).send({message: 'ERROR EN LA PETICION'});
 
@@ -101,7 +101,7 @@ rentController.readRent = (req, res) => {
       if (!rent) {
         res.status(404).send({message: 'LA RENTA'});
       } else {
-        res.status(200).send({rent: rent});
+        res.status(200).send(rent);
       }
     }
   });
@@ -174,10 +174,10 @@ rentController.deactivateRent = (req, res) => {
 
       } else {
         //RETURN UPDATED EMPLOYEE
-        res.status(200).send({rentUpdated});
+        res.status(200).send(rentUpdated);
       }
     }
-  });  
+  });
 }
 
 module.exports = rentController;

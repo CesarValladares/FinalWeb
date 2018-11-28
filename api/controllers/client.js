@@ -188,7 +188,7 @@ NONE
 clientController.readClients = (req, res) => {
   console.log('CLIENTS REQ');
 
-  Client.find({status: 'ACTIVE'}).sort('name').paginate(page, itemsPerPage, (err, clients, total) => {
+  Client.find({status: 'ACTIVE'}).sort('name').exec((err, clients) => {
     if (err) {
       res.status(500).send({message: 'ERROR EN LA PETICION'});
     }
