@@ -11,6 +11,7 @@ import { EmployeesComponent } from './components/employees/employees.component';
 import { BooksComponent } from './components/books/books.component';
 import { ClientsComponent } from './components/clients/clients.component';
 import { GoogleMapsComponent } from './components/google-maps/google-maps.component';
+import { RentsComponent } from './components/rents/rents.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { GoogleMapsComponent } from './components/google-maps/google-maps.compon
     EmployeesComponent,
     BooksComponent,
     ClientsComponent,
-    GoogleMapsComponent
+    GoogleMapsComponent,
+    RentsComponent
   ],
   imports: [
     BrowserModule,
