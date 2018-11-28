@@ -16,7 +16,6 @@ var RentSchema = Schema({
     type: Schema.ObjectId,
     ref: 'Book'
   }
-  
 });
 
 module.exports = mongoose.model('Rent', RentSchema);

@@ -24,14 +24,11 @@ in header send the next params
   role: ROLE_USER (It is stored in the client or employee atributes as role: )
 
 in the request parameters send the next atributes in the express url
-    c_id: id_of_the_client (this is mandatory)
+NONE
 
 in the request body send the next atributes in the body of the request
-  book1: id_of_book (this is not mandatory)
-  book2: id_of_book (this is not mandatory)
-  book3: id_of_book (this is not mandatory)
-  book4: id_of_book (this is not mandatory)
-  book5: id_of_book (this is not mandatory)
+  client: id_of_the_client (this is mandatory)
+  book: id_of_book (this is mandatory)
 */
 rentController.createRent = (req, res) => {
 
@@ -41,41 +38,31 @@ rentController.createRent = (req, res) => {
   rent.date_init = new Date();
   rent.date_end = rent.date_init.addDays(7)
   rent.status = 'ON_LOAN';
-  rent.client = req.params.c_id;;
-  rent.books.book1 = params.book1;
-  rent.books.book2 = params.book2;
-  rent.books.book3 = params.book3;
-  rent.books.book4 = params.book4;
-  rent.books.book5 = params.book5;
+  rent.client = params.client;
+  rent.book= params.book;
 
-  if (rent.books.book1)
-    total = total + 1;
-  if (rent.books.book2)
-    total = total + 1;
-  if (rent.books.book3)
-    total = total + 1;
-  if (rent.books.book4)
-    total = total + 1;
-  if (rent.books.book2)
-    total = total + 1;
-
-  if (total === 0) {
-    res.status(500).send({message: 'RENTA AL MENOS UN LIBRO'});
-  }
-
-  rent.save((err, rentStored) => {
-    if (err) {
-      res.status(500).send({message: 'ERROR AL GUARDAR RENTA'});
+  if (!rent.client) {
+    res.status(500).send({message: 'INGRESA UN ID DE CLIENTE EN LA PETICIÓN'});
+  } else {
+    if (!rent.book) {
+      res.status(500).send({message: 'INGRESA UN ID DE LIBRO EN LA PETICIÓN'});
 
     } else {
-      if (!rentStored) {
-        res.status(404).send({message: 'LA RENTA NO HA SIDO GUARDADA'});
+      rent.save((err, rentStored) => {
+        if (err) {
+          res.status(500).send({message: 'ERROR AL GUARDAR RENTA'});
 
-      } else {
-        res.status(200).send(rentStored);
-      }
+        } else {
+          if (!rentStored) {
+            res.status(404).send({message: 'LA RENTA NO HA SIDO GUARDADA'});
+
+          } else {
+            res.status(200).send(rentStored);
+          }
+        }
+      });
     }
-  });
+  }
 }
 
 
@@ -124,7 +111,6 @@ in the request parameters send the next atributes in the express url
 rentController.readRents = (req, res) => {
 
   var clientId = req.params.c_id;
-  var status = req.params.status;
 
   if (!clientId) { //Sacar todos las rentas de BD
       var find = Rent.find({}).sort('date_init');
@@ -132,7 +118,7 @@ rentController.readRents = (req, res) => {
       var find = Rent.find({client: clientId}).sort('date_init');
   }
 
-  find.populate({path: 'client'}).exec((err, rents) => {
+  find.exec((err, rents) => {
     if (err) {
       res.status(500).send({message: 'ERROR EN LA PETICION'});
     } else {
