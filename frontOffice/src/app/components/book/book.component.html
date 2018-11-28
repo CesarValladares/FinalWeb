@@ -32,7 +32,7 @@
             <td>{{ book.type }}</td>
             <td>{{ book.file }}</td>
             <td>{{ book.status }}</td>
-            <td><a href="localhost:3977/api/file-book/{{ book.file }}">Rent</a></td>
+            <td><a (click)="registerRent(book._id)" href="localhost:3977/api/file-book/{{ book.file }}">Rent</a></td>
           </tr>
         </tbody>
       </table>
