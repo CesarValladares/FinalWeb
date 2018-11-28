@@ -49,5 +49,7 @@ export class BookService {
     return this.token;
   }
 
-
+  getBook(){
+    return this._id;
+  }
 }

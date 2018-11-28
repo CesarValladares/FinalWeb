@@ -31,10 +31,12 @@
             <td>{{ book.type }}</td>
             <td>{{ book.file }}</td>
             <td>{{ book.status }}</td>
-            <td><input type="submit" class="btn btn btn-success" value ="Rentar"></td>
+            <td><a href="localhost:3977/api/file-book/{{ book.file }}">Rentar</a></td>
           </tr>
         </tbody>
       </table>
+
+
     </div>
   </div>
 </div>

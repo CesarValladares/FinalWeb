@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 
 import { ClientsComponent } from './components/clients/clients.component';
 import { BookComponent } from './components/book/book.component';
+import { VispdfComponent } from './vispdf/vispdf.component';
 
 
 
@@ -17,7 +18,8 @@ import { BookComponent } from './components/book/book.component';
   declarations: [
     AppComponent,
     ClientsComponent,
-    BookComponent
+    BookComponent,
+    VispdfComponent
   ],
   imports: [
     BrowserModule,
