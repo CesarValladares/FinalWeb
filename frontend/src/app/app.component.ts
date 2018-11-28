@@ -3,14 +3,16 @@ import { EmployeeService } from './services/employee.service';
 import { BookService } from './services/book.service';
 import { Employee } from './models/employee';
 import { Book } from './models/book';
+import { Client } from './models/client';
 import { NgForm } from '@angular/forms';
+import { ClientService } from './services/client.service';
 
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [EmployeeService, BookService]
+  providers: [EmployeeService, BookService, ClientService]
 })
 
 export class AppComponent implements OnInit {
@@ -22,7 +24,8 @@ export class AppComponent implements OnInit {
   public errorMessage;
   public alertRegister;
   public bookWindow: boolean = false;
-  public employeeWindow: boolean = true;
+  public employeeWindow: boolean = false;
+  public clientWindow: boolean = false;
 
 
   constructor(
@@ -114,10 +117,17 @@ export class AppComponent implements OnInit {
   public showBooks(){
     this.bookWindow = true;
     this.employeeWindow = false;
+    this.clientWindow = false;
   }
 
   public showEmployees(){
     this.bookWindow = false;
     this.employeeWindow = true;
+    this.clientWindow = false;
+  }
+  public showClients(){
+    this.bookWindow = false;
+    this.employeeWindow = false;
+    this.clientWindow = true;
   }
 }
