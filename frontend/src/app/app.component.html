@@ -6,6 +6,7 @@
           <li><a href="#." (click)="showEmployees()">Employees</a></li>
           <li> <a href="#." (click)="showBooks()">Books</a></li>
           <li> <a href="#." (click)="showClients()">Clients</a></li>
+          <li> <a href="#." (click)="showGoogleAPI()">Contacto</a></li>
         </ul>
   </div>  
 </nav>
@@ -20,6 +21,9 @@
     </div>
     <div *ngIf="clientWindow">
         <app-clients></app-clients>
+    </div>
+    <div *ngIf="googleWindow">
+        <app-google-maps></app-google-maps>
     </div>
     <br>
     <span class="btn red right" (click)="logout()">

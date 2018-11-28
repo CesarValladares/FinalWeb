@@ -46,6 +46,7 @@ export class ClientsComponent implements OnInit {
     this.clientService.getClients()
       .subscribe(
         response => {
+          console.log("CLIENTS1");
         this.clientService.clients = response as Client[];
         console.log(response);
       } , error => {

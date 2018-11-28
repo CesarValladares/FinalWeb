@@ -10,13 +10,15 @@ import { AppComponent } from './app.component';
 import { EmployeesComponent } from './components/employees/employees.component';
 import { BooksComponent } from './components/books/books.component';
 import { ClientsComponent } from './components/clients/clients.component';
+import { GoogleMapsComponent } from './components/google-maps/google-maps.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     EmployeesComponent,
     BooksComponent,
-    ClientsComponent
+    ClientsComponent,
+    GoogleMapsComponent
   ],
   imports: [
     BrowserModule,
